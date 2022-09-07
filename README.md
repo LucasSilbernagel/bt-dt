@@ -33,6 +33,14 @@ In the root folder of the app, create a new file called `.env` and save your API
 
 There should be no quotation marks or brackets in this file.
 
+A custom ESLint configuration has been added to the root folder of the app rather than the client folder. As a result, conflicts can occur between the custom ESLint configuration and the ESLint configuration built into `create-react-app`. In order for the app to run and build smoothly, create a `.env` file in the `client` folder and add the following variables:
+
+```
+SKIP_PREFLIGHT_CHECK = true
+
+DISABLE_ESLINT_PLUGIN = true
+```
+
 ### Start up the app
 
 To start up the app, make sure you are in the root folder and then run `npm run dev` in your terminal. This should start both the app's server and the front end in a single terminal window, and launch the app in a new browser tab. You are now running the app locally!
