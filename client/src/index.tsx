@@ -4,6 +4,7 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import { BrowserRouter } from 'react-router-dom'
 
 const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
 
@@ -15,9 +16,11 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <BrowserRouter>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </BrowserRouter>
   </React.StrictMode>
 )
 
