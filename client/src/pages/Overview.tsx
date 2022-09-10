@@ -1,6 +1,8 @@
 import { useLazyQuery } from '@apollo/react-hooks'
 import { gql } from '@apollo/client'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, SyntheticEvent, useState, useEffect } from 'react'
+import { Autocomplete, TextField } from '@mui/material'
+import { ICity } from '../types'
 
 const GET_CITIES = gql`
   query getCities($cityName: String!) {
@@ -14,57 +16,79 @@ const GET_CITIES = gql`
 `
 
 const Overview: React.FC = () => {
-  const [searchedCity, setSearchedCity] = useState('')
+  const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
+  const [dropdownOptions, setDropdownOptions] = useState<ICity[] | []>([])
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchedCity(e.target.value)
-  }
-
-  const [getCities, { loading, error, data }] = useLazyQuery(GET_CITIES, {
+  const [getCities, { loading, data }] = useLazyQuery(GET_CITIES, {
     variables: { cityName: '' },
   })
 
-  const handleSearch = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-    if (searchedCity) {
-      getCities({ variables: { cityName: searchedCity } })
+  const handleInputChange = (
+    _event: ChangeEvent<EventTarget>,
+    value: string
+  ) => {
+    setTimeout(() => {
+      if (value && value.length > 2) {
+        getCities({ variables: { cityName: value } })
+      } else {
+        setDropdownOptions([])
+      }
+    }, 300)
+  }
+
+  useEffect(() => {
+    /** Set the Autocomplete options to be unique cities */
+    if (data?.cities) {
+      setDropdownOptions(
+        data.cities.filter(
+          (city: ICity, index: number) =>
+            data.cities.findIndex(
+              (selectedCity: ICity) =>
+                selectedCity.formattedName === city.formattedName
+            ) === index
+        )
+      )
+    }
+  }, [data, data?.cities])
+
+  /** Save the searched city to state */
+  const handleSearch = (
+    _e: SyntheticEvent<Element, Event>,
+    value: ICity | null
+  ) => {
+    if (value) {
+      setSearchedCity({
+        formattedName: value.formattedName,
+        lon: value.lon,
+        lat: value.lat,
+        placeId: value.placeId,
+      })
     }
   }
 
-  if (error) return <h1>{`Error! ${error}`}</h1>
-  if (loading) return <h1>Loading...</h1>
-
   return (
     <>
-      {!data && <h1>Search for a city</h1>}
-      <form onSubmit={handleSearch}>
-        <input type="text" onChange={(e) => handleChange(e)} />
-        <input type="submit" />
-      </form>
-      {data?.cities && (
-        <div>
-          {data.cities.map(
-            (
-              city: {
-                formattedName: string
-                lon: number
-                lat: number
-                placeId: string
-              },
-              index: number
-            ) => {
-              return (
-                <div key={index} style={{ marginBottom: '100px' }}>
-                  <p>{city.formattedName}</p>
-                  <p>{city.lon}</p>
-                  <p>{city.lat}</p>
-                  <p>{city.placeId}</p>
-                </div>
-              )
-            }
-          )}
-        </div>
-      )}
+      <Autocomplete
+        onInputChange={handleInputChange}
+        onChange={handleSearch}
+        options={dropdownOptions}
+        loading={loading}
+        getOptionLabel={(option: ICity) => option.formattedName}
+        isOptionEqualToValue={(option: ICity, value: ICity) =>
+          option.formattedName === value.formattedName
+        }
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="City"
+            variant="outlined"
+            placeholder="Type a city name"
+            inputProps={{
+              ...params.inputProps,
+            }}
+          />
+        )}
+      />
     </>
   )
 }
