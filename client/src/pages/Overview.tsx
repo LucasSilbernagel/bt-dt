@@ -1,6 +1,13 @@
 import { useLazyQuery } from '@apollo/react-hooks'
 import { gql } from '@apollo/client'
-import { ChangeEvent, SyntheticEvent, useState, useEffect } from 'react'
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useState,
+  useEffect,
+  SetStateAction,
+  Dispatch,
+} from 'react'
 import { Autocomplete, TextField } from '@mui/material'
 import { ICity } from '../types'
 
@@ -15,8 +22,12 @@ const GET_CITIES = gql`
   }
 `
 
-const Overview: React.FC = () => {
-  const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
+interface OverviewProps {
+  setSearchedCity: Dispatch<SetStateAction<ICity | null>>
+}
+
+const Overview = (props: OverviewProps) => {
+  const { setSearchedCity } = props
   const [dropdownOptions, setDropdownOptions] = useState<ICity[] | []>([])
 
   const [getCities, { loading, data }] = useLazyQuery(GET_CITIES, {
