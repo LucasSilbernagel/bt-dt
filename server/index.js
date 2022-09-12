@@ -15,6 +15,7 @@ const typeDefs = gql`
     formattedName: String!
     lon: Float!
     lat: Float!
+    webLink: String!
   }
   type Query {
     cities(cityName: String!): [City]!
@@ -42,16 +43,23 @@ const resolvers = {
       const attractions = await axios.get(
         `https://api.geoapify.com/v2/places?apiKey=${process.env.GEOAPIFY_KEY}&categories=tourism.attraction&conditions=named&lang=en&filter=place:${args.placeId}`
       )
-      const formattedAttractions = attractions.data.features.map(
-        (attraction) => {
+      const formattedAttractions = attractions.data.features
+        .filter(
+          (attraction) =>
+            attraction.properties.datasource.raw.wikipedia ||
+            attraction.properties.datasource.raw.website
+        )
+        .map((attraction) => {
           const formattedName = attraction.properties.formatted.split(',')[0]
           return {
             formattedName: formattedName,
             lon: attraction.properties.lon,
             lat: attraction.properties.lat,
+            webLink: attraction.properties.datasource.raw.wikipedia
+              ? attraction.properties.datasource.raw.wikipedia
+              : attraction.properties.datasource.raw.website,
           }
-        }
-      )
+        })
       return formattedAttractions
     },
   },
