@@ -33,45 +33,60 @@ const App: React.FC = () => {
     }
   )
 
+  /** When app first loads, fetch existing city attraction data from localStorage */
   useEffect(() => {
-    if (searchedCity?.placeId) {
+    const fetchedCityAttractions = localStorage.getItem('attractionsInCities')
+    if (fetchedCityAttractions !== null && !attractionsInCities.length) {
+      setAttractionsInCities(JSON.parse(fetchedCityAttractions))
+    }
+  }, [])
+
+  /** When a city is searched, call the tourist attractions API unless the city is already saved */
+  useEffect(() => {
+    if (
+      searchedCity?.placeId &&
+      !attractionsInCities.find(
+        (cityAttraction) =>
+          cityAttraction.city.formattedName === searchedCity.formattedName
+      )
+    ) {
       getAttractions({ variables: { placeId: searchedCity.placeId } })
     }
-  }, [searchedCity])
+  }, [searchedCity, attractionsInCities])
 
+  /** If the searched city is not already saved, add it to the attractionsInCities list */
   useEffect(() => {
-    if (!loading && !error && data) {
-      if (searchedCity) {
-        setAttractionsInCities(() => {
-          const newAttractionsInCities: AttractionsInCities =
-            cloneDeep(attractionsInCities)
-          newAttractionsInCities.push({
-            city: searchedCity,
-            attractions: data.attractions.map(
-              (attraction: IAttractionInCity) => {
-                return { ...attraction, isVisited: false }
-              }
-            ),
-          })
-          return newAttractionsInCities
+    if (
+      !loading &&
+      !error &&
+      data &&
+      searchedCity &&
+      !attractionsInCities.find(
+        (cityAttraction) =>
+          cityAttraction.city.formattedName === searchedCity.formattedName
+      )
+    ) {
+      setAttractionsInCities(() => {
+        const newAttractionsInCities: AttractionsInCities =
+          cloneDeep(attractionsInCities)
+        newAttractionsInCities.push({
+          city: searchedCity,
+          attractions: data.attractions.map((attraction: IAttractionInCity) => {
+            return { ...attraction, isVisited: false }
+          }),
         })
-      }
+        return newAttractionsInCities
+      })
     }
-  }, [loading, error, data])
+  }, [loading, error, data, searchedCity, attractionsInCities])
 
+  /** When the attractionsInCities list is updated, also update localStorage */
   useEffect(() => {
     if (attractionsInCities.length) {
       localStorage.setItem(
         'attractionsInCities',
         JSON.stringify(attractionsInCities)
       )
-    }
-  }, [attractionsInCities])
-
-  useEffect(() => {
-    const fetchedCityAttractions = localStorage.getItem('attractionsInCities')
-    if (fetchedCityAttractions !== null) {
-      console.log(JSON.parse(fetchedCityAttractions))
     }
   }, [attractionsInCities])
 
