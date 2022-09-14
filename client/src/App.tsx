@@ -1,13 +1,14 @@
 import { CssBaseline, Grid, Typography } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import { lightTheme } from './themes'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Overview from './pages/Overview'
 import { useState, useEffect } from 'react'
 import { ICity, AttractionsInCities, IAttractionInCity } from './types'
 import { useLazyQuery } from '@apollo/react-hooks'
 import { gql } from '@apollo/client'
 import cloneDeep from 'lodash.clonedeep'
+import City from './pages/City'
 
 const GET_ATTRACTIONS = gql`
   query getAttractions($placeId: String!) {
@@ -25,6 +26,8 @@ const App: React.FC = () => {
   const [attractionsInCities, setAttractionsInCities] = useState<
     AttractionsInCities | []
   >([])
+
+  const navigate = useNavigate()
 
   const [getAttractions, { loading, data, error }] = useLazyQuery(
     GET_ATTRACTIONS,
@@ -90,6 +93,13 @@ const App: React.FC = () => {
     }
   }, [attractionsInCities])
 
+  /** When a city is searched, navigate to the city page. */
+  useEffect(() => {
+    if (searchedCity) {
+      navigate(`/city/${searchedCity.placeId}`, { replace: true })
+    }
+  }, [searchedCity])
+
   return (
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
@@ -99,6 +109,18 @@ const App: React.FC = () => {
           <Route
             path="/"
             element={<Overview setSearchedCity={setSearchedCity} />}
+          />
+          <Route
+            path="/city/:placeId"
+            element={
+              <City
+                cityAttraction={attractionsInCities.find(
+                  (attractionInCity) =>
+                    attractionInCity.city.formattedName ===
+                    searchedCity?.formattedName
+                )}
+              />
+            }
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
