@@ -111,7 +111,7 @@ const App: React.FC = () => {
             element={<Overview setSearchedCity={setSearchedCity} />}
           />
           <Route
-            path="/city/:placeId"
+            path={`/city/${searchedCity?.placeId}`}
             element={
               <City
                 cityAttraction={attractionsInCities.find(
@@ -119,6 +119,7 @@ const App: React.FC = () => {
                     attractionInCity.city.formattedName ===
                     searchedCity?.formattedName
                 )}
+                loading={loading}
               />
             }
           />
