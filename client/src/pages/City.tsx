@@ -1,5 +1,12 @@
 import { IAttractionsInCity } from '../types'
-import { CircularProgress } from '@mui/material'
+import {
+  CircularProgress,
+  Typography,
+  List,
+  ListItem,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material'
 
 interface CityProps {
   cityAttraction?: IAttractionsInCity
@@ -13,7 +20,21 @@ const City = (props: CityProps) => {
   } else {
     return (
       <>
-        <h2>{cityAttraction?.city.formattedName}</h2>
+        <Typography variant="h2">
+          {cityAttraction?.city.formattedName}
+        </Typography>
+        <List>
+          {cityAttraction?.attractions.map((attraction, index) => {
+            return (
+              <ListItem key={index}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label={attraction.formattedName}
+                />
+              </ListItem>
+            )
+          })}
+        </List>
       </>
     )
   }
