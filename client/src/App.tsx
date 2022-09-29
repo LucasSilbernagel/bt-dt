@@ -32,7 +32,7 @@ const App: React.FC = () => {
   const [getAttractions, { loading, data, error }] = useLazyQuery(
     GET_ATTRACTIONS,
     {
-      variables: { placeId: '' },
+      variables: { placeId: searchedCity?.placeId },
     }
   )
 
@@ -53,7 +53,7 @@ const App: React.FC = () => {
           cityAttraction.city.formattedName === searchedCity.formattedName
       )
     ) {
-      getAttractions({ variables: { placeId: searchedCity.placeId } })
+      getAttractions()
     }
   }, [searchedCity, attractionsInCities])
 
