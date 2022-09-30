@@ -4,7 +4,12 @@ import { lightTheme } from './themes'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Overview from './pages/Overview'
 import { useState, useEffect } from 'react'
-import { ICity, AttractionsInCities, IAttractionInCity } from './types'
+import {
+  ICity,
+  AttractionsInCities,
+  IAttraction,
+  IAttractionsInCity,
+} from './types'
 import { useLazyQuery } from '@apollo/react-hooks'
 import { gql } from '@apollo/client'
 import cloneDeep from 'lodash.clonedeep'
@@ -24,7 +29,7 @@ const GET_ATTRACTIONS = gql`
 const App: React.FC = () => {
   const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
   const [attractionsInCities, setAttractionsInCities] = useState<
-    AttractionsInCities | []
+    IAttractionsInCity[]
   >([])
 
   const navigate = useNavigate()
@@ -74,7 +79,7 @@ const App: React.FC = () => {
           cloneDeep(attractionsInCities)
         newAttractionsInCities.push({
           city: searchedCity,
-          attractions: data.attractions.map((attraction: IAttractionInCity) => {
+          attractions: data.attractions.map((attraction: IAttraction) => {
             return { ...attraction, isVisited: false }
           }),
         })
@@ -120,6 +125,8 @@ const App: React.FC = () => {
                     searchedCity?.formattedName
                 )}
                 loading={loading}
+                attractionsInCities={attractionsInCities}
+                setAttractionsInCities={setAttractionsInCities}
               />
             }
           />

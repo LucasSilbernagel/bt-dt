@@ -10,13 +10,6 @@ export interface IAttraction {
   lat: number
   lon: number
   webLink: string
-}
-
-export interface IAttractionInCity {
-  formattedName: string
-  lat: number
-  lon: number
-  webLink: string
   isVisited: boolean
 }
 
