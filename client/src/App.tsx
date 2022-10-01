@@ -126,6 +126,7 @@ const App: React.FC = () => {
                   <Overview
                     searchedCity={searchedCity}
                     setSearchedCity={setSearchedCity}
+                    attractionsInCities={attractionsInCities}
                   />
                 }
               />

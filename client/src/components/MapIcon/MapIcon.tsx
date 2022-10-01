@@ -1,18 +1,28 @@
-import AcUnitIcon from '@mui/icons-material/AcUnit'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import LocationCityIcon from '@mui/icons-material/LocationCity'
+import { SetStateAction } from 'react'
+import { IAttractionsInCity } from '../../types'
 
 interface MapIconProps {
-  handleClick: () => void
-  handleKeydown: (e: { key: string }) => void
+  cityAttraction: IAttractionsInCity
+  handleClick: (
+    e: any,
+    cityAttraction: SetStateAction<IAttractionsInCity | null>
+  ) => void
+  handleKeydown: (
+    e: any,
+    cityAttraction: SetStateAction<IAttractionsInCity | null>
+  ) => void
 }
 
 const MapIcon = (props: MapIconProps) => {
-  const { handleClick, handleKeydown } = props
+  const { cityAttraction, handleClick, handleKeydown } = props
 
   return (
-    <AcUnitIcon
+    <LocationCityIcon
       tabIndex={0}
-      onClick={handleClick}
-      onKeyDown={(e) => handleKeydown(e)}
+      onClick={(e) => handleClick(e, cityAttraction)}
+      onKeyDown={(e) => handleKeydown(e, cityAttraction)}
     />
   )
 }

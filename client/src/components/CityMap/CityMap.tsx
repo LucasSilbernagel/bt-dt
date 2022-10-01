@@ -1,9 +1,16 @@
 import { Grid } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
-import Map, { Marker } from 'react-map-gl'
+import { SetStateAction, useEffect, useRef, useState } from 'react'
+import Map, { MapboxEvent, Marker, Popup } from 'react-map-gl'
+import { AttractionsInCities, IAttractionsInCity } from '../../types'
 import MapIcon from '../MapIcon/MapIcon'
 
-const CityMap = () => {
+interface CityMapProps {
+  attractionsInCities: AttractionsInCities
+}
+
+const CityMap = (props: CityMapProps) => {
+  const { attractionsInCities } = props
+
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [height, setHeight] = useState(0)
@@ -15,6 +22,8 @@ const CityMap = () => {
     zoom: 1,
   })
 
+  const [popupInfo, setPopupInfo] = useState<IAttractionsInCity | null>(null)
+
   useEffect(() => {
     if (containerRef.current) {
       setHeight(containerRef.current.offsetHeight)
@@ -22,15 +31,39 @@ const CityMap = () => {
     }
   }, [])
 
-  const handleMapMarkerClick = () => {
-    alert('clicked')
+  const handleMapMarkerClick = (
+    e: MapboxEvent<MouseEvent>,
+    cityAttraction: SetStateAction<IAttractionsInCity | null>
+  ) => {
+    e.originalEvent?.stopPropagation()
+    setPopupInfo(cityAttraction)
   }
 
-  const handleKeydown = (e: { key: string }) => {
+  const handleKeydown = (
+    e: { key: string; preventDefault: () => void },
+    cityAttraction: SetStateAction<IAttractionsInCity | null>
+  ) => {
     if (e.key === 'Enter') {
-      alert('pressed enter')
+      e.preventDefault()
+      setPopupInfo(cityAttraction)
     }
   }
+
+  const CITY_MARKERS = attractionsInCities.map((cityAttraction, index) => (
+    <Marker
+      key={`city-${index}`}
+      longitude={cityAttraction.city.lon}
+      latitude={cityAttraction.city.lat}
+      anchor="bottom"
+      onClick={(e) => handleMapMarkerClick(e, cityAttraction)}
+    >
+      <MapIcon
+        cityAttraction={cityAttraction}
+        handleClick={handleMapMarkerClick}
+        handleKeydown={handleKeydown}
+      />
+    </Marker>
+  ))
 
   return (
     <Grid
@@ -48,17 +81,17 @@ const CityMap = () => {
         style={{ height: height, width: width }}
         onRender={(event) => event.target.resize()}
       >
-        <Marker
-          longitude={-100}
-          latitude={40}
-          anchor="bottom"
-          onClick={handleMapMarkerClick}
-        >
-          <MapIcon
-            handleClick={handleMapMarkerClick}
-            handleKeydown={handleKeydown}
-          />
-        </Marker>
+        {CITY_MARKERS}
+        {popupInfo && (
+          <Popup
+            anchor="top"
+            longitude={Number(popupInfo.city.lon)}
+            latitude={Number(popupInfo.city.lat)}
+            onClose={() => setPopupInfo(null)}
+          >
+            <div>{popupInfo.city.formattedName}</div>
+          </Popup>
+        )}
       </Map>
     </Grid>
   )
