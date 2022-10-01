@@ -1,4 +1,4 @@
-import { CssBaseline, Grid, Typography } from '@mui/material'
+import { Box, CssBaseline, Grid, Typography } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import { lightTheme } from './themes'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
@@ -109,29 +109,45 @@ const App: React.FC = () => {
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
       <Grid container direction="column">
-        <Typography variant="h1">Been there, done that!</Typography>
-        <Routes>
-          <Route
-            path="/"
-            element={<Overview setSearchedCity={setSearchedCity} />}
-          />
-          <Route
-            path={`/city/${searchedCity?.placeId}`}
-            element={
-              <City
-                cityAttraction={attractionsInCities.find(
-                  (attractionInCity) =>
-                    attractionInCity.city.formattedName ===
-                    searchedCity?.formattedName
-                )}
-                loading={loading}
-                attractionsInCities={attractionsInCities}
-                setAttractionsInCities={setAttractionsInCities}
+        <Typography
+          variant="h1"
+          sx={{ textAlign: 'center', marginBottom: '20px' }}
+        >
+          Been there, done that!
+        </Typography>
+        <Box
+          sx={{ paddingLeft: '1em', paddingRight: '1em', paddingBottom: '1em' }}
+        >
+          <Box sx={{ maxWidth: '800px', width: '100%', margin: '0 auto' }}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Overview
+                    searchedCity={searchedCity}
+                    setSearchedCity={setSearchedCity}
+                  />
+                }
               />
-            }
-          />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+              <Route
+                path={`/city/${searchedCity?.placeId}`}
+                element={
+                  <City
+                    cityAttraction={attractionsInCities.find(
+                      (attractionInCity) =>
+                        attractionInCity.city.formattedName ===
+                        searchedCity?.formattedName
+                    )}
+                    loading={loading}
+                    attractionsInCities={attractionsInCities}
+                    setAttractionsInCities={setAttractionsInCities}
+                  />
+                }
+              />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </Box>
+        </Box>
       </Grid>
     </ThemeProvider>
   )

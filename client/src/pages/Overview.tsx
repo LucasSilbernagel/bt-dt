@@ -8,7 +8,7 @@ import {
   SetStateAction,
   Dispatch,
 } from 'react'
-import { Autocomplete, TextField } from '@mui/material'
+import { Autocomplete, Paper, TextField } from '@mui/material'
 import { ICity } from '../types'
 
 const GET_CITIES = gql`
@@ -23,11 +23,12 @@ const GET_CITIES = gql`
 `
 
 interface OverviewProps {
+  searchedCity: ICity | null
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
 }
 
 const Overview = (props: OverviewProps) => {
-  const { setSearchedCity } = props
+  const { searchedCity, setSearchedCity } = props
   const [dropdownOptions, setDropdownOptions] = useState<ICity[] | []>([])
 
   const [getCities, { loading, data }] = useLazyQuery(GET_CITIES, {
@@ -74,11 +75,13 @@ const Overview = (props: OverviewProps) => {
         lat: value.lat,
         placeId: value.placeId,
       })
+    } else {
+      setSearchedCity(null)
     }
   }
 
   return (
-    <>
+    <Paper elevation={3}>
       <Autocomplete
         onInputChange={handleInputChange}
         onChange={handleSearch}
@@ -88,6 +91,7 @@ const Overview = (props: OverviewProps) => {
         isOptionEqualToValue={(option: ICity, value: ICity) =>
           option.formattedName === value.formattedName
         }
+        value={searchedCity}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -100,7 +104,7 @@ const Overview = (props: OverviewProps) => {
           />
         )}
       />
-    </>
+    </Paper>
   )
 }
 

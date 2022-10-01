@@ -6,9 +6,15 @@ import {
   ListItem,
   Checkbox,
   FormControlLabel,
+  Paper,
+  Grid,
+  Tooltip,
 } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import cloneDeep from 'lodash.clonedeep'
+import InfoIcon from '@mui/icons-material/Info'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Link } from 'react-router-dom'
 
 interface CityProps {
   cityAttraction?: IAttractionsInCity
@@ -72,24 +78,54 @@ const City = (props: CityProps) => {
   } else {
     return (
       <>
-        <Typography variant="h2">
-          {cityAttraction?.city.formattedName}
-        </Typography>
-        <List>
-          {attractionList.map((attraction, index) => {
-            return (
-              <ListItem key={index}>
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label={attraction.formattedName}
-                  onChange={() => handleCheckbox(attraction.formattedName)}
-                  id={`attraction-${index}`}
-                  checked={attraction.isVisited}
-                />
-              </ListItem>
-            )
-          })}
-        </List>
+        <Tooltip arrow title="Back">
+          <Link to="/" aria-label="Return to the overview page">
+            <ArrowBackIcon fontSize="large" color="primary" />
+          </Link>
+        </Tooltip>
+        <Paper elevation={3} sx={{ width: '100%' }}>
+          <Typography
+            variant="h2"
+            sx={{ textAlign: 'center', background: 'black', color: 'white' }}
+          >
+            {cityAttraction?.city.formattedName}
+          </Typography>
+          <List sx={{ paddingBottom: '0' }}>
+            {attractionList.map((attraction, index) => {
+              return (
+                <ListItem key={index} divider>
+                  <Grid container justifyContent="center">
+                    <Grid item xs={10} sm={8} md={6}>
+                      <FormControlLabel
+                        control={<Checkbox />}
+                        label={attraction.formattedName}
+                        onChange={() =>
+                          handleCheckbox(attraction.formattedName)
+                        }
+                        checked={attraction.isVisited}
+                      />
+                    </Grid>
+                    <Grid item container xs={2} sm={1} alignItems="center">
+                      <Tooltip
+                        arrow
+                        title={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
+                      >
+                        <a
+                          href={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`Wikipedia article about ${attraction.formattedName}`}
+                        >
+                          <InfoIcon color="info" />
+                        </a>
+                      </Tooltip>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              )
+            })}
+          </List>
+        </Paper>
       </>
     )
   }
