@@ -17,8 +17,8 @@ const CityMap = (props: CityMapProps) => {
   const [width, setWidth] = useState(0)
 
   const [viewport, setViewport] = useState({
-    latitude: 10,
-    longitude: -150,
+    latitude: 20,
+    longitude: 0,
     zoom: 1,
   })
 
@@ -39,7 +39,7 @@ const CityMap = (props: CityMapProps) => {
     setPopupInfo(cityAttraction)
   }
 
-  const handleKeydown = (
+  const handleMapMarkerKeydown = (
     e: { key: string; preventDefault: () => void },
     cityAttraction: SetStateAction<IAttractionsInCity | null>
   ) => {
@@ -60,7 +60,7 @@ const CityMap = (props: CityMapProps) => {
       <MapIcon
         cityAttraction={cityAttraction}
         handleClick={handleMapMarkerClick}
-        handleKeydown={handleKeydown}
+        handleMapMarkerKeydown={handleMapMarkerKeydown}
       />
     </Marker>
   ))

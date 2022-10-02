@@ -9,20 +9,20 @@ interface MapIconProps {
     e: any,
     cityAttraction: SetStateAction<IAttractionsInCity | null>
   ) => void
-  handleKeydown: (
+  handleMapMarkerKeydown: (
     e: any,
     cityAttraction: SetStateAction<IAttractionsInCity | null>
   ) => void
 }
 
 const MapIcon = (props: MapIconProps) => {
-  const { cityAttraction, handleClick, handleKeydown } = props
+  const { cityAttraction, handleClick, handleMapMarkerKeydown } = props
 
   return (
     <LocationCityIcon
       tabIndex={0}
       onClick={(e) => handleClick(e, cityAttraction)}
-      onKeyDown={(e) => handleKeydown(e, cityAttraction)}
+      onKeyDown={(e) => handleMapMarkerKeydown(e, cityAttraction)}
     />
   )
 }
