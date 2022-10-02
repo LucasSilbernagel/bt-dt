@@ -1,8 +1,14 @@
 import { Grid } from '@mui/material'
-import { SetStateAction, useEffect, useRef, useState } from 'react'
-import Map, { MapboxEvent, Marker, Popup } from 'react-map-gl'
-import { AttractionsInCities, IAttractionsInCity } from '../../types'
+import { useEffect, useRef, useState } from 'react'
+import Map, { MapboxEvent, Marker } from 'react-map-gl'
+import {
+  AttractionsInCities,
+  IAttraction,
+  IAttractionsInCity,
+  IPopup,
+} from '../../types'
 import MapIcon from '../MapIcon/MapIcon'
+import MapPopup from '../MapPopup/MapPopup'
 
 interface CityMapProps {
   attractionsInCities: AttractionsInCities
@@ -22,7 +28,7 @@ const CityMap = (props: CityMapProps) => {
     zoom: 1,
   })
 
-  const [popupInfo, setPopupInfo] = useState<IAttractionsInCity | null>(null)
+  const [popupInfo, setPopupInfo] = useState<IPopup | null>(null)
 
   useEffect(() => {
     if (containerRef.current) {
@@ -33,19 +39,42 @@ const CityMap = (props: CityMapProps) => {
 
   const handleMapMarkerClick = (
     e: MapboxEvent<MouseEvent>,
-    cityAttraction: SetStateAction<IAttractionsInCity | null>
+    cityAttraction: IAttractionsInCity,
+    popupType: 'city' | 'attraction',
+    attraction?: IAttraction
   ) => {
     e.originalEvent?.stopPropagation()
-    setPopupInfo(cityAttraction)
+    if (attraction) {
+      setPopupInfo({
+        attractionsInCity: cityAttraction,
+        popupType: popupType,
+        attraction: attraction,
+      })
+    } else {
+      setPopupInfo({ attractionsInCity: cityAttraction, popupType: popupType })
+    }
   }
 
   const handleMapMarkerKeydown = (
     e: { key: string; preventDefault: () => void },
-    cityAttraction: SetStateAction<IAttractionsInCity | null>
+    cityAttraction: IAttractionsInCity,
+    popupType: 'city' | 'attraction',
+    attraction?: IAttraction
   ) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      setPopupInfo(cityAttraction)
+      if (attraction) {
+        setPopupInfo({
+          attractionsInCity: cityAttraction,
+          popupType: popupType,
+          attraction: attraction,
+        })
+      } else {
+        setPopupInfo({
+          attractionsInCity: cityAttraction,
+          popupType: popupType,
+        })
+      }
     }
   }
 
@@ -55,15 +84,38 @@ const CityMap = (props: CityMapProps) => {
       longitude={cityAttraction.city.lon}
       latitude={cityAttraction.city.lat}
       anchor="bottom"
-      onClick={(e) => handleMapMarkerClick(e, cityAttraction)}
+      onClick={(e) => handleMapMarkerClick(e, cityAttraction, 'city')}
     >
       <MapIcon
+        popupType="city"
         cityAttraction={cityAttraction}
         handleClick={handleMapMarkerClick}
         handleMapMarkerKeydown={handleMapMarkerKeydown}
       />
     </Marker>
   ))
+
+  const ATTRACTION_MARKERS = attractionsInCities.map((attractionInCity) =>
+    attractionInCity.attractions.map((attraction, index) => (
+      <Marker
+        key={`attraction-${index}`}
+        longitude={attraction.lon}
+        latitude={attraction.lat}
+        anchor="bottom"
+        onClick={(e) =>
+          handleMapMarkerClick(e, attractionInCity, 'attraction', attraction)
+        }
+      >
+        <MapIcon
+          popupType="attraction"
+          cityAttraction={attractionInCity}
+          handleClick={handleMapMarkerClick}
+          handleMapMarkerKeydown={handleMapMarkerKeydown}
+          attraction={attraction}
+        />
+      </Marker>
+    ))
+  )
 
   return (
     <Grid
@@ -82,15 +134,9 @@ const CityMap = (props: CityMapProps) => {
         onRender={(event) => event.target.resize()}
       >
         {CITY_MARKERS}
+        {ATTRACTION_MARKERS}
         {popupInfo && (
-          <Popup
-            anchor="top"
-            longitude={Number(popupInfo.city.lon)}
-            latitude={Number(popupInfo.city.lat)}
-            onClose={() => setPopupInfo(null)}
-          >
-            <div>{popupInfo.city.formattedName}</div>
-          </Popup>
+          <MapPopup popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
         )}
       </Map>
     </Grid>

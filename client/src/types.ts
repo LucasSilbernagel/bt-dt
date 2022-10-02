@@ -19,3 +19,9 @@ export interface IAttractionsInCity {
 }
 
 export type AttractionsInCities = IAttractionsInCity[]
+
+export interface IPopup {
+  attractionsInCity: IAttractionsInCity
+  popupType: 'city' | 'attraction'
+  attraction?: IAttraction
+}
