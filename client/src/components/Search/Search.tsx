@@ -95,7 +95,7 @@ const Search = (props: OverviewProps) => {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="City"
+            label="Add or edit a city"
             variant="outlined"
             placeholder="Type a city name"
             inputProps={{

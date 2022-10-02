@@ -9,6 +9,7 @@ import {
 } from '../../types'
 import MapIcon from '../MapIcon/MapIcon'
 import MapPopup from '../MapPopup/MapPopup'
+import { Paper } from '@mui/material'
 
 interface CityMapProps {
   attractionsInCities: AttractionsInCities
@@ -125,20 +126,22 @@ const CityMap = (props: CityMapProps) => {
       }}
       ref={containerRef}
     >
-      <Map
-        {...viewport}
-        onMove={(event) => setViewport(event.viewState)}
-        mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/mapbox/light-v10"
-        style={{ height: height, width: width }}
-        onRender={(event) => event.target.resize()}
-      >
-        {CITY_MARKERS}
-        {ATTRACTION_MARKERS}
-        {popupInfo && (
-          <MapPopup popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
-        )}
-      </Map>
+      <Paper elevation={3}>
+        <Map
+          {...viewport}
+          onMove={(event) => setViewport(event.viewState)}
+          mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+          mapStyle="mapbox://styles/mapbox/light-v10"
+          style={{ height: height, width: width }}
+          onRender={(event) => event.target.resize()}
+        >
+          {CITY_MARKERS}
+          {ATTRACTION_MARKERS}
+          {popupInfo && (
+            <MapPopup popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
+          )}
+        </Map>
+      </Paper>
     </Grid>
   )
 }
