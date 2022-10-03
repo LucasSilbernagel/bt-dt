@@ -162,6 +162,22 @@ const App: React.FC = () => {
                   />
                 }
               />
+              {filteredAttractionsInCities.map((attractionInCity) => {
+                return (
+                  <Route
+                    key={attractionInCity.city.placeId}
+                    path={`/city/${attractionInCity.city.placeId}`}
+                    element={
+                      <City
+                        cityAttraction={attractionInCity}
+                        loading={loading}
+                        attractionsInCities={attractionsInCities}
+                        setAttractionsInCities={setAttractionsInCities}
+                      />
+                    }
+                  />
+                )
+              })}
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </Box>

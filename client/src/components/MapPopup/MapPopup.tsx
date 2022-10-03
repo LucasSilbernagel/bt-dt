@@ -1,7 +1,10 @@
-import { Typography } from '@mui/material'
+import { Typography, Tooltip, Grid } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
 import { Popup } from 'react-map-gl'
+import { Link } from 'react-router-dom'
 import { IPopup } from '../../types'
+import EditIcon from '@mui/icons-material/Edit'
+import InfoIcon from '@mui/icons-material/Info'
 
 interface CityMapProps {
   popupInfo: IPopup
@@ -30,6 +33,13 @@ const MapPopup = (props: CityMapProps) => {
             ).length
           }/${popupInfo.attractionsInCity.attractions.length}`}</span>
         </Typography>
+        <Typography sx={{ marginTop: '0.5em' }}>
+          <Link to={`/city/${popupInfo.attractionsInCity.city.placeId}`}>
+            <Tooltip arrow title="Edit city">
+              <EditIcon sx={{ fontSize: '1rem' }} />
+            </Tooltip>
+          </Link>
+        </Typography>
       </Popup>
     )
   } else if (popupInfo.popupType === 'attraction' && popupInfo.attraction) {
@@ -47,18 +57,36 @@ const MapPopup = (props: CityMapProps) => {
           {popupInfo.attractionsInCity.city.formattedName}
         </Typography>
         <Typography>
-          <a
-            href={`https://en.wikipedia.org/wiki/${popupInfo.attraction.webLink}`}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Wikipedia article about ${popupInfo.attraction.formattedName}`}
-          >
-            About
-          </a>
+          Visited: {popupInfo.attraction.isVisited ? 'Yes' : 'No'}
         </Typography>
-        <Typography>
-          {popupInfo.attraction.isVisited ? 'Visited' : 'Not visited'}
-        </Typography>
+        <Grid container justifyContent="space-evenly" alignItems="center">
+          <Grid item sx={{ paddingTop: '7px' }}>
+            <Typography>
+              <a
+                href={`https://en.wikipedia.org/wiki/${popupInfo.attraction.webLink}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Wikipedia article about ${popupInfo.attraction.formattedName}`}
+              >
+                <Tooltip
+                  arrow
+                  title={`https://en.wikipedia.org/wiki/${popupInfo.attraction.webLink}`}
+                >
+                  <InfoIcon sx={{ fontSize: '1rem' }} />
+                </Tooltip>
+              </a>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ marginTop: '0.5em' }}>
+              <Link to={`/city/${popupInfo.attractionsInCity.city.placeId}`}>
+                <Tooltip arrow title="Edit city">
+                  <EditIcon sx={{ fontSize: '1rem' }} />
+                </Tooltip>
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </Popup>
     )
   } else return null

@@ -23,10 +23,12 @@ const Overview = (props: OverviewProps) => {
     <>
       <Search searchedCity={searchedCity} setSearchedCity={setSearchedCity} />
       <CityMap filteredAttractionsInCities={filteredAttractionsInCities} />
-      <CityFilter
-        filteredAttractionsInCities={filteredAttractionsInCities}
-        setCityFilter={setCityFilter}
-      />
+      {filteredAttractionsInCities.length > 0 && (
+        <CityFilter
+          filteredAttractionsInCities={filteredAttractionsInCities}
+          setCityFilter={setCityFilter}
+        />
+      )}
     </>
   )
 }

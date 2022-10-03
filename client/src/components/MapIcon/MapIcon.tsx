@@ -46,6 +46,7 @@ const MapIcon = (props: MapIconProps) => {
         tabIndex={0}
         onClick={(e) => handleClick(e, cityAttraction, popupType)}
         onKeyDown={(e) => handleMapMarkerKeydown(e, cityAttraction, popupType)}
+        sx={{ fontSize: '2.5rem' }}
       />
     )
   }
