@@ -36,7 +36,7 @@ const MapPopup = (props: CityMapProps) => {
         <Typography sx={{ marginTop: '0.5em' }}>
           <Link to={`/city/${popupInfo.attractionsInCity.city.placeId}`}>
             <Tooltip arrow title="Edit city">
-              <EditIcon sx={{ fontSize: '1rem' }} />
+              <EditIcon sx={{ fontSize: '1.2rem' }} />
             </Tooltip>
           </Link>
         </Typography>
@@ -72,7 +72,7 @@ const MapPopup = (props: CityMapProps) => {
                   arrow
                   title={`https://en.wikipedia.org/wiki/${popupInfo.attraction.webLink}`}
                 >
-                  <InfoIcon sx={{ fontSize: '1rem' }} />
+                  <InfoIcon sx={{ fontSize: '1.2rem' }} />
                 </Tooltip>
               </a>
             </Typography>
@@ -81,7 +81,7 @@ const MapPopup = (props: CityMapProps) => {
             <Typography sx={{ marginTop: '0.5em' }}>
               <Link to={`/city/${popupInfo.attractionsInCity.city.placeId}`}>
                 <Tooltip arrow title="Edit city">
-                  <EditIcon sx={{ fontSize: '1rem' }} />
+                  <EditIcon sx={{ fontSize: '1.2rem' }} />
                 </Tooltip>
               </Link>
             </Typography>

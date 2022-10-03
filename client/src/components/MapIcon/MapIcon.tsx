@@ -30,23 +30,49 @@ const MapIcon = (props: MapIconProps) => {
     attraction,
   } = props
 
+  const getAttractionMarkerColour = (displayedAttraction: IAttraction) =>
+    displayedAttraction.isVisited ? '#009E73' : '#E69F00'
+
+  const getCityMarkerColour = (displayedCityAttraction: IAttractionsInCity) => {
+    if (
+      displayedCityAttraction.attractions.every(
+        (attraction) => attraction.isVisited
+      )
+    ) {
+      return '#009E73'
+    } else if (
+      displayedCityAttraction.attractions.some(
+        (attraction) => attraction.isVisited
+      )
+    ) {
+      return '#56B4E9'
+    } else {
+      return '#E69F00'
+    }
+  }
+
   if (attraction) {
     return (
       <AttractionsIcon
         tabIndex={0}
-        onClick={(e) => handleClick(e, cityAttraction, popupType, attraction)}
-        onKeyDown={(e) =>
+        onClick={(e: any) =>
+          handleClick(e, cityAttraction, popupType, attraction)
+        }
+        onKeyDown={(e: any) =>
           handleMapMarkerKeydown(e, cityAttraction, popupType, attraction)
         }
+        sx={{ color: getAttractionMarkerColour(attraction) }}
       />
     )
   } else {
     return (
       <LocationCityIcon
         tabIndex={0}
-        onClick={(e) => handleClick(e, cityAttraction, popupType)}
-        onKeyDown={(e) => handleMapMarkerKeydown(e, cityAttraction, popupType)}
-        sx={{ fontSize: '2.5rem' }}
+        onClick={(e: any) => handleClick(e, cityAttraction, popupType)}
+        onKeyDown={(e: any) =>
+          handleMapMarkerKeydown(e, cityAttraction, popupType)
+        }
+        sx={{ fontSize: '2.5rem', color: getCityMarkerColour(cityAttraction) }}
       />
     )
   }
