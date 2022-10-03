@@ -143,6 +143,7 @@ const App: React.FC = () => {
                     searchedCity={searchedCity}
                     setSearchedCity={setSearchedCity}
                     filteredAttractionsInCities={filteredAttractionsInCities}
+                    cityFilter={cityFilter}
                     setCityFilter={setCityFilter}
                   />
                 }

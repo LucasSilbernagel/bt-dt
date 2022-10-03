@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
-import Map, { MapboxEvent, Marker } from 'react-map-gl'
+import Map, { MapboxEvent, Marker, MapRef } from 'react-map-gl'
 import {
   AttractionsInCities,
   IAttraction,
@@ -13,21 +13,26 @@ import { Paper } from '@mui/material'
 
 interface CityMapProps {
   filteredAttractionsInCities: AttractionsInCities
+  cityFilter: string | null
 }
 
 const CityMap = (props: CityMapProps) => {
-  const { filteredAttractionsInCities } = props
+  const { filteredAttractionsInCities, cityFilter } = props
+
+  const mapRef = useRef<MapRef>(null)
 
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
 
-  const [viewport, setViewport] = useState({
+  const INITIAL_VIEWPORT = {
     latitude: 20,
     longitude: 0,
     zoom: 1,
-  })
+  }
+
+  const [viewport, setViewport] = useState(INITIAL_VIEWPORT)
 
   const [popupInfo, setPopupInfo] = useState<IPopup | null>(null)
 
@@ -37,6 +42,22 @@ const CityMap = (props: CityMapProps) => {
       setWidth(containerRef.current.offsetWidth)
     }
   }, [])
+
+  /** Zoom to selected city filter */
+  useEffect(() => {
+    if (cityFilter) {
+      const selectedCity = filteredAttractionsInCities.filter(
+        (cityAttraction) => cityAttraction.city.formattedName === cityFilter
+      )[0].city
+      mapRef.current?.flyTo({
+        center: [selectedCity.lon, selectedCity.lat],
+        duration: 2000,
+        zoom: 10,
+      })
+    } else {
+      mapRef.current?.flyTo(INITIAL_VIEWPORT)
+    }
+  }, [cityFilter])
 
   const handleMapMarkerClick = (
     e: MapboxEvent<MouseEvent>,
@@ -132,6 +153,7 @@ const CityMap = (props: CityMapProps) => {
       <Paper elevation={3}>
         <Map
           {...viewport}
+          ref={mapRef}
           onMove={(event) => setViewport(event.viewState)}
           mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           mapStyle="mapbox://styles/mapbox/light-v10"

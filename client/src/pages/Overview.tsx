@@ -8,6 +8,7 @@ interface OverviewProps {
   searchedCity: ICity | null
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
   filteredAttractionsInCities: AttractionsInCities
+  cityFilter: string | null
   setCityFilter: Dispatch<SetStateAction<string | null>>
 }
 
@@ -16,13 +17,17 @@ const Overview = (props: OverviewProps) => {
     searchedCity,
     setSearchedCity,
     filteredAttractionsInCities,
+    cityFilter,
     setCityFilter,
   } = props
 
   return (
     <>
       <Search searchedCity={searchedCity} setSearchedCity={setSearchedCity} />
-      <CityMap filteredAttractionsInCities={filteredAttractionsInCities} />
+      <CityMap
+        filteredAttractionsInCities={filteredAttractionsInCities}
+        cityFilter={cityFilter}
+      />
       {filteredAttractionsInCities.length > 0 && (
         <CityFilter
           filteredAttractionsInCities={filteredAttractionsInCities}
