@@ -12,11 +12,11 @@ import MapPopup from '../MapPopup/MapPopup'
 import { Paper } from '@mui/material'
 
 interface CityMapProps {
-  attractionsInCities: AttractionsInCities
+  filteredAttractionsInCities: AttractionsInCities
 }
 
 const CityMap = (props: CityMapProps) => {
-  const { attractionsInCities } = props
+  const { filteredAttractionsInCities } = props
 
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -79,43 +79,46 @@ const CityMap = (props: CityMapProps) => {
     }
   }
 
-  const CITY_MARKERS = attractionsInCities.map((cityAttraction, index) => (
-    <Marker
-      key={`city-${index}`}
-      longitude={cityAttraction.city.lon}
-      latitude={cityAttraction.city.lat}
-      anchor="bottom"
-      onClick={(e) => handleMapMarkerClick(e, cityAttraction, 'city')}
-    >
-      <MapIcon
-        popupType="city"
-        cityAttraction={cityAttraction}
-        handleClick={handleMapMarkerClick}
-        handleMapMarkerKeydown={handleMapMarkerKeydown}
-      />
-    </Marker>
-  ))
-
-  const ATTRACTION_MARKERS = attractionsInCities.map((attractionInCity) =>
-    attractionInCity.attractions.map((attraction, index) => (
+  const CITY_MARKERS = filteredAttractionsInCities.map(
+    (cityAttraction, index) => (
       <Marker
-        key={`attraction-${index}`}
-        longitude={attraction.lon}
-        latitude={attraction.lat}
+        key={`city-${index}`}
+        longitude={cityAttraction.city.lon}
+        latitude={cityAttraction.city.lat}
         anchor="bottom"
-        onClick={(e) =>
-          handleMapMarkerClick(e, attractionInCity, 'attraction', attraction)
-        }
+        onClick={(e) => handleMapMarkerClick(e, cityAttraction, 'city')}
       >
         <MapIcon
-          popupType="attraction"
-          cityAttraction={attractionInCity}
+          popupType="city"
+          cityAttraction={cityAttraction}
           handleClick={handleMapMarkerClick}
           handleMapMarkerKeydown={handleMapMarkerKeydown}
-          attraction={attraction}
         />
       </Marker>
-    ))
+    )
+  )
+
+  const ATTRACTION_MARKERS = filteredAttractionsInCities.map(
+    (attractionInCity) =>
+      attractionInCity.attractions.map((attraction, index) => (
+        <Marker
+          key={`attraction-${index}`}
+          longitude={attraction.lon}
+          latitude={attraction.lat}
+          anchor="bottom"
+          onClick={(e) =>
+            handleMapMarkerClick(e, attractionInCity, 'attraction', attraction)
+          }
+        >
+          <MapIcon
+            popupType="attraction"
+            cityAttraction={attractionInCity}
+            handleClick={handleMapMarkerClick}
+            handleMapMarkerKeydown={handleMapMarkerKeydown}
+            attraction={attraction}
+          />
+        </Marker>
+      ))
   )
 
   return (

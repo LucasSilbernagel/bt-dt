@@ -31,6 +31,9 @@ const App: React.FC = () => {
   const [attractionsInCities, setAttractionsInCities] = useState<
     IAttractionsInCity[]
   >([])
+  const [filteredAttractionsInCities, setFilteredAttractionsInCities] =
+    useState<IAttractionsInCity[]>([])
+  const [cityFilter, setCityFilter] = useState<string | null>(null)
 
   const navigate = useNavigate()
 
@@ -105,6 +108,19 @@ const App: React.FC = () => {
     }
   }, [searchedCity])
 
+  /** Handle filters */
+  useEffect(() => {
+    setFilteredAttractionsInCities(attractionsInCities)
+    if (cityFilter) {
+      setFilteredAttractionsInCities((prevFilteredAttractionsInCities) =>
+        prevFilteredAttractionsInCities.filter(
+          (attractionInCity) =>
+            attractionInCity.city.formattedName === cityFilter
+        )
+      )
+    }
+  }, [attractionsInCities, cityFilter])
+
   return (
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
@@ -126,7 +142,8 @@ const App: React.FC = () => {
                   <Overview
                     searchedCity={searchedCity}
                     setSearchedCity={setSearchedCity}
-                    attractionsInCities={attractionsInCities}
+                    filteredAttractionsInCities={filteredAttractionsInCities}
+                    setCityFilter={setCityFilter}
                   />
                 }
               />
