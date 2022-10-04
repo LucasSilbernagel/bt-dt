@@ -27,7 +27,12 @@ const GET_ATTRACTIONS = gql`
 `
 
 const App: React.FC = () => {
-  const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
+  const [searchedCity, setSearchedCity] = useState<ICity>({
+    formattedName: '',
+    lon: 0,
+    lat: 0,
+    placeId: '',
+  })
   const [attractionsInCities, setAttractionsInCities] = useState<
     IAttractionsInCity[]
   >([])
@@ -40,7 +45,7 @@ const App: React.FC = () => {
   const [getAttractions, { loading, data, error }] = useLazyQuery(
     GET_ATTRACTIONS,
     {
-      variables: { placeId: searchedCity?.placeId },
+      variables: { placeId: searchedCity.placeId },
     }
   )
 
@@ -55,7 +60,7 @@ const App: React.FC = () => {
   /** When a city is searched, call the tourist attractions API unless the city is already saved */
   useEffect(() => {
     if (
-      searchedCity?.placeId &&
+      searchedCity.formattedName.length > 0 &&
       !attractionsInCities.find(
         (cityAttraction) =>
           cityAttraction.city.formattedName === searchedCity.formattedName
@@ -71,7 +76,7 @@ const App: React.FC = () => {
       !loading &&
       !error &&
       data &&
-      searchedCity &&
+      searchedCity.formattedName.length > 0 &&
       !attractionsInCities.find(
         (cityAttraction) =>
           cityAttraction.city.formattedName === searchedCity.formattedName
@@ -103,7 +108,7 @@ const App: React.FC = () => {
 
   /** When a city is searched, navigate to the city page. */
   useEffect(() => {
-    if (searchedCity) {
+    if (searchedCity.formattedName.length > 0) {
       navigate(`/city/${searchedCity.placeId}`, { replace: true })
     }
   }, [searchedCity])
@@ -148,21 +153,23 @@ const App: React.FC = () => {
                   />
                 }
               />
-              <Route
-                path={`/city/${searchedCity?.placeId}`}
-                element={
-                  <City
-                    cityAttraction={attractionsInCities.find(
-                      (attractionInCity) =>
-                        attractionInCity.city.formattedName ===
-                        searchedCity?.formattedName
-                    )}
-                    loading={loading}
-                    attractionsInCities={attractionsInCities}
-                    setAttractionsInCities={setAttractionsInCities}
-                  />
-                }
-              />
+              {searchedCity.formattedName.length > 0 && (
+                <Route
+                  path={`/city/${searchedCity.placeId}`}
+                  element={
+                    <City
+                      cityAttraction={attractionsInCities.find(
+                        (attractionInCity) =>
+                          attractionInCity.city.formattedName ===
+                          searchedCity.formattedName
+                      )}
+                      loading={loading}
+                      attractionsInCities={attractionsInCities}
+                      setAttractionsInCities={setAttractionsInCities}
+                    />
+                  }
+                />
+              )}
               {filteredAttractionsInCities.map((attractionInCity) => {
                 return (
                   <Route

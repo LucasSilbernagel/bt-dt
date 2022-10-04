@@ -9,7 +9,7 @@ import {
   Dispatch,
 } from 'react'
 import { Autocomplete, Paper, TextField } from '@mui/material'
-import { ICity } from '../../types'
+import { AttractionsInCities, ICity } from '../../types'
 
 const GET_CITIES = gql`
   query getCities($cityName: String!) {
@@ -23,12 +23,13 @@ const GET_CITIES = gql`
 `
 
 interface OverviewProps {
-  searchedCity: ICity | null
-  setSearchedCity: Dispatch<SetStateAction<ICity | null>>
+  searchedCity: ICity
+  setSearchedCity: Dispatch<SetStateAction<ICity>>
+  filteredAttractionsInCities: AttractionsInCities
 }
 
 const Search = (props: OverviewProps) => {
-  const { searchedCity, setSearchedCity } = props
+  const { searchedCity, setSearchedCity, filteredAttractionsInCities } = props
   const [dropdownOptions, setDropdownOptions] = useState<ICity[] | []>([])
 
   const [getCities, { loading, data }] = useLazyQuery(GET_CITIES, {
@@ -42,6 +43,12 @@ const Search = (props: OverviewProps) => {
     setTimeout(() => {
       if (value && value.length > 2) {
         getCities({ variables: { cityName: value } })
+      } else if (filteredAttractionsInCities.length > 0) {
+        setDropdownOptions(
+          filteredAttractionsInCities.map(
+            (attractionInCity) => attractionInCity.city
+          )
+        )
       } else {
         setDropdownOptions([])
       }
@@ -60,8 +67,14 @@ const Search = (props: OverviewProps) => {
             ) === index
         )
       )
+    } else if (filteredAttractionsInCities.length > 0) {
+      setDropdownOptions(
+        filteredAttractionsInCities.map(
+          (attractionInCity) => attractionInCity.city
+        )
+      )
     }
-  }, [data, data?.cities])
+  }, [data, data?.cities, filteredAttractionsInCities])
 
   /** Save the searched city to state */
   const handleSearch = (
@@ -76,7 +89,12 @@ const Search = (props: OverviewProps) => {
         placeId: value.placeId,
       })
     } else {
-      setSearchedCity(null)
+      setSearchedCity({
+        formattedName: '',
+        lon: 0,
+        lat: 0,
+        placeId: '',
+      })
     }
   }
 
@@ -91,7 +109,7 @@ const Search = (props: OverviewProps) => {
         isOptionEqualToValue={(option: ICity, value: ICity) =>
           option.formattedName === value.formattedName
         }
-        value={searchedCity}
+        // value={searchedCity.formattedName.length > 0 ? searchedCity : undefined}
         renderInput={(params) => (
           <TextField
             {...params}
