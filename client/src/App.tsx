@@ -27,12 +27,7 @@ const GET_ATTRACTIONS = gql`
 `
 
 const App: React.FC = () => {
-  const [searchedCity, setSearchedCity] = useState<ICity>({
-    formattedName: '',
-    lon: 0,
-    lat: 0,
-    placeId: '',
-  })
+  const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
   const [attractionsInCities, setAttractionsInCities] = useState<
     IAttractionsInCity[]
   >([])
@@ -45,7 +40,7 @@ const App: React.FC = () => {
   const [getAttractions, { loading, data, error }] = useLazyQuery(
     GET_ATTRACTIONS,
     {
-      variables: { placeId: searchedCity.placeId },
+      variables: { placeId: searchedCity?.placeId },
     }
   )
 
@@ -60,7 +55,7 @@ const App: React.FC = () => {
   /** When a city is searched, call the tourist attractions API unless the city is already saved */
   useEffect(() => {
     if (
-      searchedCity.formattedName.length > 0 &&
+      searchedCity &&
       !attractionsInCities.find(
         (cityAttraction) =>
           cityAttraction.city.formattedName === searchedCity.formattedName
@@ -76,7 +71,7 @@ const App: React.FC = () => {
       !loading &&
       !error &&
       data &&
-      searchedCity.formattedName.length > 0 &&
+      searchedCity &&
       !attractionsInCities.find(
         (cityAttraction) =>
           cityAttraction.city.formattedName === searchedCity.formattedName
@@ -108,7 +103,7 @@ const App: React.FC = () => {
 
   /** When a city is searched, navigate to the city page. */
   useEffect(() => {
-    if (searchedCity.formattedName.length > 0) {
+    if (searchedCity) {
       navigate(`/city/${searchedCity.placeId}`, { replace: true })
     }
   }, [searchedCity])
@@ -145,7 +140,6 @@ const App: React.FC = () => {
                 path="/"
                 element={
                   <Overview
-                    searchedCity={searchedCity}
                     setSearchedCity={setSearchedCity}
                     filteredAttractionsInCities={filteredAttractionsInCities}
                     cityFilter={cityFilter}
@@ -153,23 +147,21 @@ const App: React.FC = () => {
                   />
                 }
               />
-              {searchedCity.formattedName.length > 0 && (
-                <Route
-                  path={`/city/${searchedCity.placeId}`}
-                  element={
-                    <City
-                      cityAttraction={attractionsInCities.find(
-                        (attractionInCity) =>
-                          attractionInCity.city.formattedName ===
-                          searchedCity.formattedName
-                      )}
-                      loading={loading}
-                      attractionsInCities={attractionsInCities}
-                      setAttractionsInCities={setAttractionsInCities}
-                    />
-                  }
-                />
-              )}
+              <Route
+                path={`/city/${searchedCity?.placeId}`}
+                element={
+                  <City
+                    cityAttraction={attractionsInCities.find(
+                      (attractionInCity) =>
+                        attractionInCity.city.formattedName ===
+                        searchedCity?.formattedName
+                    )}
+                    loading={loading}
+                    attractionsInCities={attractionsInCities}
+                    setAttractionsInCities={setAttractionsInCities}
+                  />
+                }
+              />
               {filteredAttractionsInCities.map((attractionInCity) => {
                 return (
                   <Route

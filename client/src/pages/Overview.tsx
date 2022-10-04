@@ -5,8 +5,7 @@ import Search from '../components/Search/Search'
 import CityFilter from '../components/CityFilter/CityFilter'
 
 interface OverviewProps {
-  searchedCity: ICity
-  setSearchedCity: Dispatch<SetStateAction<ICity>>
+  setSearchedCity: Dispatch<SetStateAction<ICity | null>>
   filteredAttractionsInCities: AttractionsInCities
   cityFilter: string | null
   setCityFilter: Dispatch<SetStateAction<string | null>>
@@ -14,7 +13,6 @@ interface OverviewProps {
 
 const Overview = (props: OverviewProps) => {
   const {
-    searchedCity,
     setSearchedCity,
     filteredAttractionsInCities,
     cityFilter,
@@ -24,7 +22,6 @@ const Overview = (props: OverviewProps) => {
   return (
     <>
       <Search
-        searchedCity={searchedCity}
         setSearchedCity={setSearchedCity}
         filteredAttractionsInCities={filteredAttractionsInCities}
       />

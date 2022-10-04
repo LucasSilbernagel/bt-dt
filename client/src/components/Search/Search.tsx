@@ -23,13 +23,12 @@ const GET_CITIES = gql`
 `
 
 interface OverviewProps {
-  searchedCity: ICity
-  setSearchedCity: Dispatch<SetStateAction<ICity>>
+  setSearchedCity: Dispatch<SetStateAction<ICity | null>>
   filteredAttractionsInCities: AttractionsInCities
 }
 
 const Search = (props: OverviewProps) => {
-  const { searchedCity, setSearchedCity, filteredAttractionsInCities } = props
+  const { setSearchedCity, filteredAttractionsInCities } = props
   const [dropdownOptions, setDropdownOptions] = useState<ICity[] | []>([])
 
   const [getCities, { loading, data }] = useLazyQuery(GET_CITIES, {
@@ -89,12 +88,7 @@ const Search = (props: OverviewProps) => {
         placeId: value.placeId,
       })
     } else {
-      setSearchedCity({
-        formattedName: '',
-        lon: 0,
-        lat: 0,
-        placeId: '',
-      })
+      setSearchedCity(null)
     }
   }
 
@@ -109,7 +103,6 @@ const Search = (props: OverviewProps) => {
         isOptionEqualToValue={(option: ICity, value: ICity) =>
           option.formattedName === value.formattedName
         }
-        // value={searchedCity.formattedName.length > 0 ? searchedCity : undefined}
         renderInput={(params) => (
           <TextField
             {...params}
