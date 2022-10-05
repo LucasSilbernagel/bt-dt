@@ -14,10 +14,11 @@ import { Paper } from '@mui/material'
 interface CityMapProps {
   filteredAttractionsInCities: AttractionsInCities
   cityFilter: string | null
+  mapLayers: string[] | null
 }
 
 const CityMap = (props: CityMapProps) => {
-  const { filteredAttractionsInCities, cityFilter } = props
+  const { filteredAttractionsInCities, cityFilter, mapLayers } = props
 
   const mapRef = useRef<MapRef>(null)
 
@@ -160,8 +161,8 @@ const CityMap = (props: CityMapProps) => {
           style={{ height: height, width: width }}
           onRender={(event) => event.target.resize()}
         >
-          {CITY_MARKERS}
-          {ATTRACTION_MARKERS}
+          {mapLayers?.includes('Cities') && CITY_MARKERS}
+          {mapLayers?.includes('Attractions') && ATTRACTION_MARKERS}
           {popupInfo && (
             <MapPopup popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
           )}

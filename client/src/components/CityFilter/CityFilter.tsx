@@ -36,7 +36,7 @@ const CityFilter = (props: CityFilterProps) => {
   }
 
   return (
-    <Paper elevation={3} sx={{ marginTop: '1em' }}>
+    <Paper elevation={3}>
       <Autocomplete
         onChange={(event, value) => handleChange(event, value)}
         options={cities}
