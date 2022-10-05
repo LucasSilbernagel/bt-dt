@@ -1,5 +1,6 @@
 import { AttractionsInCities, IAttraction, IAttractionsInCity } from '../types'
 import {
+  Backdrop,
   CircularProgress,
   Typography,
   List,
@@ -75,7 +76,11 @@ const City = (props: CityProps) => {
   }
 
   if (loading) {
-    return <CircularProgress size={80} />
+    return (
+      <Backdrop sx={{ color: '#fff' }} open={true}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )
   } else {
     return (
       <>
