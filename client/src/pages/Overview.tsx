@@ -5,6 +5,7 @@ import Search from '../components/Search/Search'
 import CityFilter from '../components/CityFilter/CityFilter'
 import MapLayerSelect from '../components/MapLayerSelect/MapLayerSelect'
 import { Grid } from '@mui/material'
+import MapLegend from '../components/MapLegend/MapLegend'
 
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
@@ -42,22 +43,25 @@ const Overview = (props: OverviewProps) => {
         mapLayers={mapLayers}
       />
       {filteredAttractionsInCities.length > 0 && (
-        <Grid
-          container
-          justifyContent="space-between"
-          spacing={2}
-          sx={{ marginTop: '0.5em' }}
-        >
-          <Grid item xs={12} sm={6}>
-            <CityFilter
-              filteredAttractionsInCities={filteredAttractionsInCities}
-              setCityFilter={setCityFilter}
-            />
+        <>
+          <MapLegend />
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={2}
+            sx={{ marginTop: '0.5em' }}
+          >
+            <Grid item xs={12} sm={6}>
+              <CityFilter
+                filteredAttractionsInCities={filteredAttractionsInCities}
+                setCityFilter={setCityFilter}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <MapLayerSelect setMapLayers={setMapLayers} />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <MapLayerSelect setMapLayers={setMapLayers} />
-          </Grid>
-        </Grid>
+        </>
       )}
     </>
   )
