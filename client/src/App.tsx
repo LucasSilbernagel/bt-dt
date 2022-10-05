@@ -96,7 +96,11 @@ const App: React.FC = () => {
     if (attractionsInCities.length) {
       localStorage.setItem(
         'attractionsInCities',
-        JSON.stringify(attractionsInCities)
+        JSON.stringify(
+          attractionsInCities.filter(
+            (attractionInCity) => attractionInCity.attractions.length > 0
+          )
+        )
       )
     }
   }, [attractionsInCities])
@@ -110,7 +114,11 @@ const App: React.FC = () => {
 
   /** Handle filters */
   useEffect(() => {
-    setFilteredAttractionsInCities(attractionsInCities)
+    setFilteredAttractionsInCities(
+      attractionsInCities.filter(
+        (attractionInCity) => attractionInCity.attractions.length > 0
+      )
+    )
     if (cityFilter) {
       setFilteredAttractionsInCities((prevFilteredAttractionsInCities) =>
         prevFilteredAttractionsInCities.filter(

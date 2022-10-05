@@ -9,6 +9,7 @@ import {
   Paper,
   Grid,
   Tooltip,
+  Box,
 } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import cloneDeep from 'lodash.clonedeep'
@@ -90,41 +91,57 @@ const City = (props: CityProps) => {
           >
             {cityAttraction?.city.formattedName}
           </Typography>
-          <List sx={{ paddingBottom: '0' }}>
-            {attractionList.map((attraction, index) => {
-              return (
-                <ListItem key={index} divider>
-                  <Grid container justifyContent="center">
-                    <Grid item xs={10} sm={8} md={6}>
-                      <FormControlLabel
-                        control={<Checkbox />}
-                        label={attraction.formattedName}
-                        onChange={() =>
-                          handleCheckbox(attraction.formattedName)
-                        }
-                        checked={attraction.isVisited}
-                      />
-                    </Grid>
-                    <Grid item container xs={2} sm={1} alignItems="center">
-                      <Tooltip
-                        arrow
-                        title={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
-                      >
-                        <a
-                          href={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label={`Wikipedia article about ${attraction.formattedName}`}
+          {cityAttraction && cityAttraction.attractions?.length > 0 ? (
+            <List sx={{ paddingBottom: '0' }}>
+              {attractionList.map((attraction, index) => {
+                return (
+                  <ListItem key={index} divider>
+                    <Grid container justifyContent="center">
+                      <Grid item xs={10} sm={8} md={6}>
+                        <FormControlLabel
+                          control={<Checkbox />}
+                          label={attraction.formattedName}
+                          onChange={() =>
+                            handleCheckbox(attraction.formattedName)
+                          }
+                          checked={attraction.isVisited}
+                        />
+                      </Grid>
+                      <Grid item container xs={2} sm={1} alignItems="center">
+                        <Tooltip
+                          arrow
+                          title={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
                         >
-                          <InfoIcon color="info" />
-                        </a>
-                      </Tooltip>
+                          <a
+                            href={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`Wikipedia article about ${attraction.formattedName}`}
+                          >
+                            <InfoIcon color="info" />
+                          </a>
+                        </Tooltip>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </ListItem>
-              )
-            })}
-          </List>
+                  </ListItem>
+                )
+              })}
+            </List>
+          ) : (
+            <Box sx={{ padding: '2em' }}>
+              <Typography variant="h4">
+                Sorry, the{' '}
+                <a
+                  href="https://apidocs.geoapify.com/docs/places/#about"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Geoapify places API
+                </a>{' '}
+                doesn&apos;t have any attractions on file for this city! 🙁
+              </Typography>
+            </Box>
+          )}
         </Paper>
       </>
     )
