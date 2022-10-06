@@ -1,24 +1,34 @@
 import { Grid } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import Map, { MapboxEvent, Marker, MapRef } from 'react-map-gl'
 import {
   AttractionsInCities,
   IAttraction,
   IAttractionsInCity,
+  IMapViewport,
   IPopup,
 } from '../../types'
 import MapIcon from '../MapIcon/MapIcon'
 import MapPopup from '../MapPopup/MapPopup'
 import { Paper } from '@mui/material'
+import { DEFAULT_MAP_VIEWPORT } from '../../constants'
 
 interface CityMapProps {
   filteredAttractionsInCities: AttractionsInCities
   cityFilter: string | null
   mapLayers: string[] | null
+  mapViewport: IMapViewport
+  setMapViewport: Dispatch<SetStateAction<IMapViewport>>
 }
 
 const CityMap = (props: CityMapProps) => {
-  const { filteredAttractionsInCities, cityFilter, mapLayers } = props
+  const {
+    filteredAttractionsInCities,
+    cityFilter,
+    mapLayers,
+    mapViewport,
+    setMapViewport,
+  } = props
 
   const mapRef = useRef<MapRef>(null)
 
@@ -26,14 +36,6 @@ const CityMap = (props: CityMapProps) => {
 
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
-
-  const INITIAL_VIEWPORT = {
-    latitude: 20,
-    longitude: 0,
-    zoom: 1,
-  }
-
-  const [viewport, setViewport] = useState(INITIAL_VIEWPORT)
 
   const [popupInfo, setPopupInfo] = useState<IPopup | null>(null)
 
@@ -56,7 +58,7 @@ const CityMap = (props: CityMapProps) => {
         zoom: 10,
       })
     } else {
-      mapRef.current?.flyTo(INITIAL_VIEWPORT)
+      mapRef.current?.flyTo(DEFAULT_MAP_VIEWPORT)
     }
   }, [cityFilter])
 
@@ -153,9 +155,9 @@ const CityMap = (props: CityMapProps) => {
     >
       <Paper elevation={3}>
         <Map
-          {...viewport}
+          {...mapViewport}
           ref={mapRef}
-          onMove={(event) => setViewport(event.viewState)}
+          onMove={(event) => setMapViewport(event.viewState)}
           mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           mapStyle="mapbox://styles/mapbox/light-v10"
           style={{ height: height, width: width }}

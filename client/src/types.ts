@@ -25,3 +25,9 @@ export interface IPopup {
   popupType: 'city' | 'attraction'
   attraction?: IAttraction
 }
+
+export interface IMapViewport {
+  latitude: number
+  longitude: number
+  zoom: number
+}

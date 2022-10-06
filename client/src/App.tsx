@@ -150,6 +150,9 @@ const App: React.FC = () => {
                   <Overview
                     setSearchedCity={setSearchedCity}
                     filteredAttractionsInCities={filteredAttractionsInCities}
+                    setFilteredAttractionsInCities={
+                      setFilteredAttractionsInCities
+                    }
                     cityFilter={cityFilter}
                     setCityFilter={setCityFilter}
                   />

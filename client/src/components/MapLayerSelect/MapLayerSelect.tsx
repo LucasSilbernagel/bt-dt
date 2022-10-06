@@ -1,16 +1,18 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import { Autocomplete, Paper, TextField } from '@mui/material'
+import { DEFAULT_MAP_LAYERS } from '../../constants'
 
 interface MapLayerSelectProps {
-  setMapLayers: Dispatch<SetStateAction<string[] | null>>
+  mapLayers: string[]
+  setMapLayers: Dispatch<SetStateAction<string[]>>
 }
 
 const MapLayerSelect = (props: MapLayerSelectProps) => {
-  const { setMapLayers } = props
+  const { mapLayers, setMapLayers } = props
 
   const handleChange = (
     _event: SyntheticEvent<Element, Event>,
-    value: string[] | null
+    value: string[]
   ) => {
     setMapLayers(value)
   }
@@ -24,8 +26,9 @@ const MapLayerSelect = (props: MapLayerSelectProps) => {
         isOptionEqualToValue={(option: string, value: string) =>
           option === value
         }
+        value={mapLayers}
         multiple
-        defaultValue={['Cities', 'Attractions']}
+        defaultValue={DEFAULT_MAP_LAYERS}
         renderInput={(params) => (
           <TextField
             {...params}
