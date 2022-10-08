@@ -1,4 +1,4 @@
-import { Box, CssBaseline, Grid, Typography } from '@mui/material'
+import { Box, CssBaseline, Divider, Grid, Typography } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import { lightTheme } from './themes'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
@@ -207,6 +207,21 @@ const App: React.FC = () => {
             </Routes>
           </Box>
         </Box>
+        <Grid item>
+          <Divider sx={{ marginTop: '2em' }} />
+          <Typography
+            sx={{ textAlign: 'center', marginTop: '1em', marginBottom: '1em' }}
+          >
+            Built by{' '}
+            <a
+              href="https://lucassilbernagel.com/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Lucas Silbernagel
+            </a>
+          </Typography>
+        </Grid>
       </Grid>
     </ThemeProvider>
   )
