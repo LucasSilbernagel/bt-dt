@@ -9,9 +9,10 @@ import CityMap from '../components/CityMap/CityMap'
 import Search from '../components/Search/Search'
 import CityFilter from '../components/CityFilter/CityFilter'
 import MapLayerSelect from '../components/MapLayerSelect/MapLayerSelect'
-import { Box, Button, Grid, Modal, Typography } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import MapLegend from '../components/MapLegend/MapLegend'
 import { DEFAULT_MAP_LAYERS, DEFAULT_MAP_VIEWPORT } from '../constants'
+import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
 
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
@@ -30,27 +31,14 @@ const Overview = (props: OverviewProps) => {
     setCityFilter,
   } = props
 
+  const [cityOptions, setCityOptions] = useState<ICity[]>([])
+
   const [mapLayers, setMapLayers] = useState<string[]>(DEFAULT_MAP_LAYERS)
 
   const [mapViewport, setMapViewport] =
     useState<IMapViewport>(DEFAULT_MAP_VIEWPORT)
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const handleOpenModal = () => setIsModalOpen(true)
-  const handleCloseModal = () => setIsModalOpen(false)
-
-  const modalStyle = {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '90%',
-    maxWidth: '350px',
-    borderRadius: '5px',
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-  }
 
   const handleResetFilters = () => {
     setMapLayers(DEFAULT_MAP_LAYERS)
@@ -60,46 +48,28 @@ const Overview = (props: OverviewProps) => {
 
   const clearAllData = () => {
     handleResetFilters()
+    setSearchedCity(null)
     setFilteredAttractionsInCities([])
+    setCityOptions([])
     localStorage.removeItem('attractionsInCities')
-    handleCloseModal()
+    setIsModalOpen(false)
   }
 
   return (
     <>
-      <Modal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-title"
-      >
-        <Box sx={modalStyle}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            Are you sure you want to delete all saved data?
-          </Typography>
-          <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            sx={{ marginTop: '0.5em' }}
-          >
-            <Grid item>
-              <Button onClick={handleCloseModal} variant="outlined">
-                Cancel
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button variant="contained" onClick={clearAllData}>
-                Yes
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Modal>
+      <ConfirmModal
+        isModalOpen={isModalOpen}
+        handleCloseModal={() => setIsModalOpen(false)}
+        handleConfirm={clearAllData}
+        confirmMessage="Are you sure you want to delete all saved data?"
+      />
       <Grid container justifyContent="center">
         <Grid item xs={12} sm={8} md={6}>
           <Search
             setSearchedCity={setSearchedCity}
             filteredAttractionsInCities={filteredAttractionsInCities}
+            cityOptions={cityOptions}
+            setCityOptions={setCityOptions}
           />
         </Grid>
       </Grid>
@@ -139,7 +109,10 @@ const Overview = (props: OverviewProps) => {
                 </Button>
               </Grid>
               <Grid item>
-                <Button variant="contained" onClick={() => handleOpenModal()}>
+                <Button
+                  variant="contained"
+                  onClick={() => setIsModalOpen(true)}
+                >
                   Clear all data
                 </Button>
               </Grid>

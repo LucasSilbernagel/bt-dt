@@ -21,16 +21,18 @@ import { Link } from 'react-router-dom'
 interface CityProps {
   cityAttraction?: IAttractionsInCity
   loading: boolean
-  attractionsInCities: IAttractionsInCity[]
-  setAttractionsInCities: Dispatch<SetStateAction<AttractionsInCities | []>>
+  filteredAttractionsInCities: IAttractionsInCity[]
+  setFilteredAttractionsInCities: Dispatch<
+    SetStateAction<AttractionsInCities | []>
+  >
 }
 
 const City = (props: CityProps) => {
   const {
     cityAttraction,
     loading,
-    attractionsInCities,
-    setAttractionsInCities,
+    filteredAttractionsInCities,
+    setFilteredAttractionsInCities,
   } = props
 
   const [attractionList, setAttractionList] = useState<IAttraction[]>([])
@@ -45,8 +47,8 @@ const City = (props: CityProps) => {
   /** Update the list of attractions for the selected city as they are checked or unchecked */
   useEffect(() => {
     if (attractionList.length > 0) {
-      const newAttractionsInCities = cloneDeep(attractionsInCities)
-      setAttractionsInCities(
+      const newAttractionsInCities = cloneDeep(filteredAttractionsInCities)
+      setFilteredAttractionsInCities(
         newAttractionsInCities.map((attractionInCity) => {
           return {
             ...attractionInCity,

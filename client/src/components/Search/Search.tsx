@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import {
   ChangeEvent,
   SyntheticEvent,
-  useState,
   useEffect,
   SetStateAction,
   Dispatch,
@@ -25,11 +24,17 @@ const GET_CITIES = gql`
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
   filteredAttractionsInCities: AttractionsInCities
+  cityOptions: ICity[]
+  setCityOptions: Dispatch<SetStateAction<ICity[]>>
 }
 
 const Search = (props: OverviewProps) => {
-  const { setSearchedCity, filteredAttractionsInCities } = props
-  const [dropdownOptions, setDropdownOptions] = useState<ICity[] | []>([])
+  const {
+    setSearchedCity,
+    filteredAttractionsInCities,
+    cityOptions,
+    setCityOptions,
+  } = props
 
   const [getCities, { loading, data }] = useLazyQuery(GET_CITIES, {
     variables: { cityName: '' },
@@ -43,13 +48,13 @@ const Search = (props: OverviewProps) => {
       if (value && value.length > 2) {
         getCities({ variables: { cityName: value } })
       } else if (filteredAttractionsInCities.length > 0) {
-        setDropdownOptions(
+        setCityOptions(
           filteredAttractionsInCities.map(
             (attractionInCity) => attractionInCity.city
           )
         )
       } else {
-        setDropdownOptions([])
+        setCityOptions([])
       }
     }, 300)
   }
@@ -57,7 +62,7 @@ const Search = (props: OverviewProps) => {
   useEffect(() => {
     /** Set the Autocomplete options to be unique cities */
     if (data?.cities) {
-      setDropdownOptions(
+      setCityOptions(
         data.cities.filter(
           (city: ICity, index: number) =>
             data.cities.findIndex(
@@ -67,7 +72,7 @@ const Search = (props: OverviewProps) => {
         )
       )
     } else if (filteredAttractionsInCities.length > 0) {
-      setDropdownOptions(
+      setCityOptions(
         filteredAttractionsInCities.map(
           (attractionInCity) => attractionInCity.city
         )
@@ -97,7 +102,7 @@ const Search = (props: OverviewProps) => {
       <Autocomplete
         onInputChange={handleInputChange}
         onChange={handleSearch}
-        options={dropdownOptions}
+        options={cityOptions}
         loading={loading}
         getOptionLabel={(option: ICity) => option.formattedName}
         isOptionEqualToValue={(option: ICity, value: ICity) =>

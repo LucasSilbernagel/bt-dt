@@ -47,7 +47,11 @@ const App: React.FC = () => {
   /** When app first loads, fetch existing city attraction data from localStorage */
   useEffect(() => {
     const fetchedCityAttractions = localStorage.getItem('attractionsInCities')
-    if (fetchedCityAttractions !== null && !attractionsInCities.length) {
+    if (
+      fetchedCityAttractions !== null &&
+      !attractionsInCities.length &&
+      !filteredAttractionsInCities.length
+    ) {
       setAttractionsInCities(JSON.parse(fetchedCityAttractions))
     }
   }, [])
@@ -56,30 +60,32 @@ const App: React.FC = () => {
   useEffect(() => {
     if (
       searchedCity &&
-      !attractionsInCities.find(
+      !filteredAttractionsInCities.find(
         (cityAttraction) =>
           cityAttraction.city.formattedName === searchedCity.formattedName
       )
     ) {
       getAttractions()
     }
-  }, [searchedCity, attractionsInCities])
+  }, [searchedCity, filteredAttractionsInCities])
 
-  /** If the searched city is not already saved, add it to the attractionsInCities list */
+  /** If the searched city is not already saved, add it to the filteredAttractionsInCities list */
   useEffect(() => {
     if (
       !loading &&
       !error &&
       data &&
+      data.attractions.length > 0 &&
       searchedCity &&
-      !attractionsInCities.find(
+      !filteredAttractionsInCities.find(
         (cityAttraction) =>
           cityAttraction.city.formattedName === searchedCity.formattedName
       )
     ) {
-      setAttractionsInCities(() => {
-        const newAttractionsInCities: AttractionsInCities =
-          cloneDeep(attractionsInCities)
+      setFilteredAttractionsInCities(() => {
+        const newAttractionsInCities: AttractionsInCities = cloneDeep(
+          filteredAttractionsInCities
+        )
         newAttractionsInCities.push({
           city: searchedCity,
           attractions: data.attractions.map((attraction: IAttraction) => {
@@ -89,21 +95,21 @@ const App: React.FC = () => {
         return newAttractionsInCities
       })
     }
-  }, [loading, error, data, searchedCity, attractionsInCities])
+  }, [loading, error, data, searchedCity, filteredAttractionsInCities])
 
-  /** When the attractionsInCities list is updated, also update localStorage */
+  /** When the filteredAttractionsInCities list is updated, also update localStorage */
   useEffect(() => {
-    if (attractionsInCities.length) {
+    if (filteredAttractionsInCities.length > 0) {
       localStorage.setItem(
         'attractionsInCities',
         JSON.stringify(
-          attractionsInCities.filter(
+          filteredAttractionsInCities.filter(
             (attractionInCity) => attractionInCity.attractions.length > 0
           )
         )
       )
     }
-  }, [attractionsInCities])
+  }, [filteredAttractionsInCities])
 
   /** When a city is searched, navigate to the city page. */
   useEffect(() => {
@@ -162,14 +168,16 @@ const App: React.FC = () => {
                 path={`/city/${searchedCity?.placeId}`}
                 element={
                   <City
-                    cityAttraction={attractionsInCities.find(
+                    cityAttraction={filteredAttractionsInCities.find(
                       (attractionInCity) =>
                         attractionInCity.city.formattedName ===
                         searchedCity?.formattedName
                     )}
                     loading={loading}
-                    attractionsInCities={attractionsInCities}
-                    setAttractionsInCities={setAttractionsInCities}
+                    filteredAttractionsInCities={filteredAttractionsInCities}
+                    setFilteredAttractionsInCities={
+                      setFilteredAttractionsInCities
+                    }
                   />
                 }
               />
@@ -182,8 +190,12 @@ const App: React.FC = () => {
                       <City
                         cityAttraction={attractionInCity}
                         loading={loading}
-                        attractionsInCities={attractionsInCities}
-                        setAttractionsInCities={setAttractionsInCities}
+                        filteredAttractionsInCities={
+                          filteredAttractionsInCities
+                        }
+                        setFilteredAttractionsInCities={
+                          setFilteredAttractionsInCities
+                        }
                       />
                     }
                   />
