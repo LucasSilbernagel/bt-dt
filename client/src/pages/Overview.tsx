@@ -104,14 +104,19 @@ const Overview = (props: OverviewProps) => {
             </Grid>
             <Grid item container justifyContent="flex-end" spacing={2}>
               <Grid item>
-                <Button variant="contained" onClick={handleResetFilters}>
+                <Button
+                  variant="outlined"
+                  onClick={handleResetFilters}
+                  color="warning"
+                >
                   Reset map & filters
                 </Button>
               </Grid>
               <Grid item>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   onClick={() => setIsModalOpen(true)}
+                  color="error"
                 >
                   Clear all data
                 </Button>

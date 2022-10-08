@@ -40,7 +40,11 @@ const ConfirmModal = (props: ConfirmModalProps) => {
           sx={{ marginTop: '0.5em' }}
         >
           <Grid item>
-            <Button onClick={handleCloseModal} variant="outlined">
+            <Button
+              onClick={handleCloseModal}
+              variant="outlined"
+              color="warning"
+            >
               Cancel
             </Button>
           </Grid>

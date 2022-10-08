@@ -131,7 +131,7 @@ const City = (props: CityProps) => {
           </Grid>
           <Grid item>
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={() => setIsModalOpen(true)}
               color="error"
             >
