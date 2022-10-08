@@ -20,6 +20,7 @@ interface OverviewProps {
   setFilteredAttractionsInCities: Dispatch<SetStateAction<IAttractionsInCity[]>>
   cityFilter: string | null
   setCityFilter: Dispatch<SetStateAction<string | null>>
+  isDarkMode: boolean
 }
 
 const Overview = (props: OverviewProps) => {
@@ -29,6 +30,7 @@ const Overview = (props: OverviewProps) => {
     setFilteredAttractionsInCities,
     cityFilter,
     setCityFilter,
+    isDarkMode,
   } = props
 
   const [cityOptions, setCityOptions] = useState<ICity[]>([])
@@ -79,6 +81,7 @@ const Overview = (props: OverviewProps) => {
         mapLayers={mapLayers}
         mapViewport={mapViewport}
         setMapViewport={setMapViewport}
+        isDarkMode={isDarkMode}
       />
       {filteredAttractionsInCities.length > 0 && (
         <>

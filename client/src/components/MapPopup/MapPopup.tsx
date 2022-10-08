@@ -22,10 +22,10 @@ const MapPopup = (props: CityMapProps) => {
         latitude={Number(popupInfo.attractionsInCity.city.lat)}
         onClose={() => setPopupInfo(null)}
       >
-        <Typography sx={{ fontWeight: 'bold' }}>
+        <Typography sx={{ fontWeight: 'bold', color: 'black' }}>
           {popupInfo.attractionsInCity.city.formattedName}
         </Typography>
-        <Typography sx={{ fontWeight: 'bold' }}>
+        <Typography sx={{ fontWeight: 'bold', color: 'black' }}>
           Attractions visited:{' '}
           <span style={{ fontWeight: 'normal' }}>{`${
             popupInfo.attractionsInCity.attractions.filter(
@@ -33,7 +33,7 @@ const MapPopup = (props: CityMapProps) => {
             ).length
           }/${popupInfo.attractionsInCity.attractions.length}`}</span>
         </Typography>
-        <Typography sx={{ marginTop: '0.5em' }}>
+        <Typography sx={{ marginTop: '0.5em', color: 'black' }}>
           <Link to={`/city/${popupInfo.attractionsInCity.city.placeId}`}>
             <Tooltip arrow title="Edit city">
               <EditIcon sx={{ fontSize: '1.2rem' }} />
@@ -50,13 +50,13 @@ const MapPopup = (props: CityMapProps) => {
         latitude={Number(popupInfo.attraction.lat)}
         onClose={() => setPopupInfo(null)}
       >
-        <Typography sx={{ fontWeight: 'bold' }}>
+        <Typography sx={{ fontWeight: 'bold', color: 'black' }}>
           {popupInfo.attraction.formattedName}
         </Typography>
-        <Typography>
+        <Typography sx={{ color: 'black' }}>
           {popupInfo.attractionsInCity.city.formattedName}
         </Typography>
-        <Typography>
+        <Typography sx={{ color: 'black' }}>
           Visited: {popupInfo.attraction.isVisited ? 'Yes' : 'No'}
         </Typography>
         <Grid container justifyContent="space-evenly" alignItems="center">

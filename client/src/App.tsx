@@ -1,6 +1,14 @@
-import { Box, CssBaseline, Divider, Grid, Typography } from '@mui/material'
+import {
+  Box,
+  CssBaseline,
+  Divider,
+  FormControlLabel,
+  Grid,
+  Switch,
+  Typography,
+} from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
-import { lightTheme } from './themes'
+import { lightTheme, darkTheme } from './themes'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Overview from './pages/Overview'
 import { useState, useEffect } from 'react'
@@ -27,6 +35,7 @@ const GET_ATTRACTIONS = gql`
 `
 
 const App: React.FC = () => {
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
   const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
   const [attractionsInCities, setAttractionsInCities] = useState<
     IAttractionsInCity[]
@@ -34,6 +43,7 @@ const App: React.FC = () => {
   const [filteredAttractionsInCities, setFilteredAttractionsInCities] =
     useState<IAttractionsInCity[]>([])
   const [cityFilter, setCityFilter] = useState<string | null>(null)
+  const savedDarkMode = localStorage.getItem('isDarkMode')
 
   const navigate = useNavigate()
 
@@ -44,6 +54,11 @@ const App: React.FC = () => {
     }
   )
 
+  const handleThemeChange = () => {
+    localStorage.setItem('isDarkMode', JSON.stringify(!isDarkMode))
+    setIsDarkMode(!isDarkMode)
+  }
+
   /** When app first loads, fetch existing city attraction data from localStorage */
   useEffect(() => {
     const fetchedCityAttractions = localStorage.getItem('attractionsInCities')
@@ -53,6 +68,17 @@ const App: React.FC = () => {
       !filteredAttractionsInCities.length
     ) {
       setAttractionsInCities(JSON.parse(fetchedCityAttractions))
+    }
+  }, [])
+
+  /** Remember user preference for dark or light theme */
+  useEffect(() => {
+    if (savedDarkMode !== null) {
+      if (savedDarkMode === 'true') {
+        setIsDarkMode(true)
+      } else {
+        setIsDarkMode(false)
+      }
     }
   }, [])
 
@@ -136,9 +162,25 @@ const App: React.FC = () => {
   }, [attractionsInCities, cityFilter])
 
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Grid container direction="column">
+        <Grid item container justifyContent="flex-end">
+          <Grid item sx={{ paddingTop: '1em', paddingBottom: '1em' }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  color="default"
+                  checked={isDarkMode}
+                  onClick={handleThemeChange}
+                />
+              }
+              label={
+                isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'
+              }
+            />
+          </Grid>
+        </Grid>
         <Typography
           variant="h1"
           sx={{ textAlign: 'center', marginBottom: '20px' }}
@@ -161,6 +203,7 @@ const App: React.FC = () => {
                     }
                     cityFilter={cityFilter}
                     setCityFilter={setCityFilter}
+                    isDarkMode={isDarkMode}
                   />
                 }
               />
@@ -217,6 +260,7 @@ const App: React.FC = () => {
               href="https://lucassilbernagel.com/"
               target="_blank"
               rel="noreferrer"
+              style={{ color: isDarkMode ? 'white' : 'black' }}
             >
               Lucas Silbernagel
             </a>

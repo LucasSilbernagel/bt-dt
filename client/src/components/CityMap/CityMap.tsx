@@ -19,6 +19,7 @@ interface CityMapProps {
   mapLayers: string[] | null
   mapViewport: IMapViewport
   setMapViewport: Dispatch<SetStateAction<IMapViewport>>
+  isDarkMode: boolean
 }
 
 const CityMap = (props: CityMapProps) => {
@@ -28,6 +29,7 @@ const CityMap = (props: CityMapProps) => {
     mapLayers,
     mapViewport,
     setMapViewport,
+    isDarkMode,
   } = props
 
   const mapRef = useRef<MapRef>(null)
@@ -159,7 +161,11 @@ const CityMap = (props: CityMapProps) => {
           ref={mapRef}
           onMove={(event) => setMapViewport(event.viewState)}
           mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          mapStyle="mapbox://styles/mapbox/light-v10"
+          mapStyle={
+            isDarkMode
+              ? 'mapbox://styles/mapbox/dark-v10'
+              : 'mapbox://styles/mapbox/light-v10'
+          }
           style={{ height: height, width: width }}
           onRender={(event) => event.target.resize()}
         >
