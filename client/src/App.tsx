@@ -178,6 +178,7 @@ const App: React.FC = () => {
                     setFilteredAttractionsInCities={
                       setFilteredAttractionsInCities
                     }
+                    setSearchedCity={setSearchedCity}
                   />
                 }
               />
@@ -196,6 +197,7 @@ const App: React.FC = () => {
                         setFilteredAttractionsInCities={
                           setFilteredAttractionsInCities
                         }
+                        setSearchedCity={setSearchedCity}
                       />
                     }
                   />

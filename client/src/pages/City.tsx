@@ -1,4 +1,9 @@
-import { AttractionsInCities, IAttraction, IAttractionsInCity } from '../types'
+import {
+  AttractionsInCities,
+  IAttraction,
+  IAttractionsInCity,
+  ICity,
+} from '../types'
 import {
   Backdrop,
   CircularProgress,
@@ -11,12 +16,14 @@ import {
   Grid,
   Tooltip,
   Box,
+  Button,
 } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import cloneDeep from 'lodash.clonedeep'
 import InfoIcon from '@mui/icons-material/Info'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
 
 interface CityProps {
   cityAttraction?: IAttractionsInCity
@@ -25,6 +32,7 @@ interface CityProps {
   setFilteredAttractionsInCities: Dispatch<
     SetStateAction<AttractionsInCities | []>
   >
+  setSearchedCity: Dispatch<SetStateAction<ICity | null>>
 }
 
 const City = (props: CityProps) => {
@@ -33,9 +41,14 @@ const City = (props: CityProps) => {
     loading,
     filteredAttractionsInCities,
     setFilteredAttractionsInCities,
+    setSearchedCity,
   } = props
 
+  const navigate = useNavigate()
+
   const [attractionList, setAttractionList] = useState<IAttraction[]>([])
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   /** Get the list of attractions for the selected city */
   useEffect(() => {
@@ -77,6 +90,22 @@ const City = (props: CityProps) => {
     )
   }
 
+  const deleteCity = () => {
+    const newAttractionsInCities = cloneDeep(filteredAttractionsInCities)
+    const remainingAttractionsInCities = newAttractionsInCities.filter(
+      (attractionInCity) =>
+        attractionInCity.city.placeId !== cityAttraction?.city.placeId
+    )
+    setFilteredAttractionsInCities(remainingAttractionsInCities)
+    localStorage.setItem(
+      'attractionsInCities',
+      JSON.stringify(remainingAttractionsInCities)
+    )
+    setSearchedCity(null)
+    navigate('/')
+    setIsModalOpen(false)
+  }
+
   if (loading) {
     return (
       <Backdrop sx={{ color: '#fff' }} open={true}>
@@ -86,11 +115,26 @@ const City = (props: CityProps) => {
   } else {
     return (
       <>
-        <Tooltip arrow title="Back">
-          <Link to="/" aria-label="Return to the overview page">
-            <ArrowBackIcon fontSize="large" color="primary" />
-          </Link>
-        </Tooltip>
+        <ConfirmModal
+          isModalOpen={isModalOpen}
+          handleCloseModal={() => setIsModalOpen(false)}
+          handleConfirm={deleteCity}
+          confirmMessage={`Are you sure you want to delete ${cityAttraction?.city.formattedName}?`}
+        />
+        <Grid container justifyContent="space-between">
+          <Grid item>
+            <Tooltip arrow title="Back">
+              <Link to="/" aria-label="Return to the overview page">
+                <ArrowBackIcon fontSize="large" color="primary" />
+              </Link>
+            </Tooltip>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" onClick={() => setIsModalOpen(true)}>
+              Delete city
+            </Button>
+          </Grid>
+        </Grid>
         <Paper elevation={3} sx={{ width: '100%' }}>
           <Typography
             variant="h2"
