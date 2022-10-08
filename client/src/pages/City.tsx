@@ -130,7 +130,11 @@ const City = (props: CityProps) => {
             </Tooltip>
           </Grid>
           <Grid item>
-            <Button variant="contained" onClick={() => setIsModalOpen(true)}>
+            <Button
+              variant="contained"
+              onClick={() => setIsModalOpen(true)}
+              color="error"
+            >
               Delete city
             </Button>
           </Grid>
