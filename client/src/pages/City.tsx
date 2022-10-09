@@ -163,12 +163,9 @@ const City = (props: CityProps) => {
                         />
                       </Grid>
                       <Grid item container xs={2} sm={1} alignItems="center">
-                        <Tooltip
-                          arrow
-                          title={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
-                        >
+                        <Tooltip arrow title={attraction.webLink}>
                           <a
-                            href={`https://en.wikipedia.org/wiki/${attraction.webLink}`}
+                            href={attraction.webLink}
                             target="_blank"
                             rel="noreferrer"
                             aria-label={`Wikipedia article about ${attraction.formattedName}`}

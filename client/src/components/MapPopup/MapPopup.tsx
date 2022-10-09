@@ -63,15 +63,12 @@ const MapPopup = (props: CityMapProps) => {
           <Grid item sx={{ paddingTop: '7px' }}>
             <Typography>
               <a
-                href={`https://en.wikipedia.org/wiki/${popupInfo.attraction.webLink}`}
+                href={popupInfo.attraction.webLink}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`Wikipedia article about ${popupInfo.attraction.formattedName}`}
               >
-                <Tooltip
-                  arrow
-                  title={`https://en.wikipedia.org/wiki/${popupInfo.attraction.webLink}`}
-                >
+                <Tooltip arrow title={popupInfo.attraction.webLink}>
                   <InfoIcon sx={{ fontSize: '1.2rem' }} />
                 </Tooltip>
               </a>

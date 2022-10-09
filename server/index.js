@@ -56,7 +56,7 @@ const resolvers = {
             lon: attraction.properties.lon,
             lat: attraction.properties.lat,
             webLink: attraction.properties.datasource.raw.wikipedia
-              ? attraction.properties.datasource.raw.wikipedia
+              ? `https://en.wikipedia.org/wiki/${attraction.properties.datasource.raw.wikipedia}`
               : attraction.properties.datasource.raw.website,
           }
         })
