@@ -28,6 +28,7 @@ const MapLayerSelect = (props: MapLayerSelectProps) => {
         }
         value={mapLayers}
         multiple
+        filterSelectedOptions
         defaultValue={DEFAULT_MAP_LAYERS}
         renderInput={(params) => (
           <TextField

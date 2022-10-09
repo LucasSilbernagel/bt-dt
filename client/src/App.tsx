@@ -190,7 +190,13 @@ const App: React.FC = () => {
         <Box
           sx={{ paddingLeft: '1em', paddingRight: '1em', paddingBottom: '1em' }}
         >
-          <Box sx={{ maxWidth: '800px', width: '100%', margin: '0 auto' }}>
+          <Box
+            sx={{
+              maxWidth: { xs: '800px', lg: '1200px' },
+              width: '100%',
+              margin: '0 auto',
+            }}
+          >
             <Routes>
               <Route
                 path="/"
@@ -210,19 +216,27 @@ const App: React.FC = () => {
               <Route
                 path={`/city/${searchedCity?.placeId}`}
                 element={
-                  <City
-                    cityAttraction={filteredAttractionsInCities.find(
-                      (attractionInCity) =>
-                        attractionInCity.city.formattedName ===
-                        searchedCity?.formattedName
-                    )}
-                    loading={loading}
-                    filteredAttractionsInCities={filteredAttractionsInCities}
-                    setFilteredAttractionsInCities={
-                      setFilteredAttractionsInCities
-                    }
-                    setSearchedCity={setSearchedCity}
-                  />
+                  <Box
+                    sx={{
+                      maxWidth: '800px',
+                      width: '100%',
+                      margin: '0 auto',
+                    }}
+                  >
+                    <City
+                      cityAttraction={filteredAttractionsInCities.find(
+                        (attractionInCity) =>
+                          attractionInCity.city.formattedName ===
+                          searchedCity?.formattedName
+                      )}
+                      loading={loading}
+                      filteredAttractionsInCities={filteredAttractionsInCities}
+                      setFilteredAttractionsInCities={
+                        setFilteredAttractionsInCities
+                      }
+                      setSearchedCity={setSearchedCity}
+                    />
+                  </Box>
                 }
               />
               {filteredAttractionsInCities.map((attractionInCity) => {
@@ -231,17 +245,25 @@ const App: React.FC = () => {
                     key={attractionInCity.city.placeId}
                     path={`/city/${attractionInCity.city.placeId}`}
                     element={
-                      <City
-                        cityAttraction={attractionInCity}
-                        loading={loading}
-                        filteredAttractionsInCities={
-                          filteredAttractionsInCities
-                        }
-                        setFilteredAttractionsInCities={
-                          setFilteredAttractionsInCities
-                        }
-                        setSearchedCity={setSearchedCity}
-                      />
+                      <Box
+                        sx={{
+                          maxWidth: '800px',
+                          width: '100%',
+                          margin: '0 auto',
+                        }}
+                      >
+                        <City
+                          cityAttraction={attractionInCity}
+                          loading={loading}
+                          filteredAttractionsInCities={
+                            filteredAttractionsInCities
+                          }
+                          setFilteredAttractionsInCities={
+                            setFilteredAttractionsInCities
+                          }
+                          setSearchedCity={setSearchedCity}
+                        />
+                      </Box>
                     }
                   />
                 )

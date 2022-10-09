@@ -12,6 +12,7 @@ import MapIcon from '../MapIcon/MapIcon'
 import MapPopup from '../MapPopup/MapPopup'
 import { Paper } from '@mui/material'
 import { DEFAULT_MAP_VIEWPORT } from '../../constants'
+import MapLegend from '../MapLegend/MapLegend'
 
 interface CityMapProps {
   filteredAttractionsInCities: AttractionsInCities
@@ -148,35 +149,38 @@ const CityMap = (props: CityMapProps) => {
   )
 
   return (
-    <Grid
-      sx={{
-        width: '100%',
-        height: { xs: '200px', sm: '450px' },
-      }}
-      ref={containerRef}
-    >
-      <Paper elevation={3}>
-        <Map
-          {...mapViewport}
-          ref={mapRef}
-          onMove={(event) => setMapViewport(event.viewState)}
-          mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          mapStyle={
-            isDarkMode
-              ? 'mapbox://styles/mapbox/dark-v10'
-              : 'mapbox://styles/mapbox/light-v10'
-          }
-          style={{ height: height, width: width }}
-          onRender={(event) => event.target.resize()}
-        >
-          {mapLayers?.includes('Cities') && CITY_MARKERS}
-          {mapLayers?.includes('Attractions') && ATTRACTION_MARKERS}
-          {popupInfo && (
-            <MapPopup popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
-          )}
-        </Map>
-      </Paper>
-    </Grid>
+    <>
+      <Grid
+        sx={{
+          width: '100%',
+          height: { xs: '200px', sm: '450px' },
+        }}
+        ref={containerRef}
+      >
+        <Paper elevation={3} sx={{ borderRadius: '5px', overflow: 'hidden' }}>
+          <Map
+            {...mapViewport}
+            ref={mapRef}
+            onMove={(event) => setMapViewport(event.viewState)}
+            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            mapStyle={
+              isDarkMode
+                ? 'mapbox://styles/mapbox/dark-v10'
+                : 'mapbox://styles/mapbox/light-v10'
+            }
+            style={{ height: height, width: width }}
+            onRender={(event) => event.target.resize()}
+          >
+            {mapLayers?.includes('Cities') && CITY_MARKERS}
+            {mapLayers?.includes('Attractions') && ATTRACTION_MARKERS}
+            {popupInfo && (
+              <MapPopup popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
+            )}
+          </Map>
+        </Paper>
+      </Grid>
+      <MapLegend />
+    </>
   )
 }
 

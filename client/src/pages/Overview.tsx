@@ -10,7 +10,6 @@ import Search from '../components/Search/Search'
 import CityFilter from '../components/CityFilter/CityFilter'
 import MapLayerSelect from '../components/MapLayerSelect/MapLayerSelect'
 import { Button, Grid } from '@mui/material'
-import MapLegend from '../components/MapLegend/MapLegend'
 import { DEFAULT_MAP_LAYERS, DEFAULT_MAP_VIEWPORT } from '../constants'
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
 
@@ -65,69 +64,78 @@ const Overview = (props: OverviewProps) => {
         handleConfirm={clearAllData}
         confirmMessage="Are you sure you want to delete all saved data?"
       />
-      <Grid container justifyContent="center">
-        <Grid item xs={12} sm={8} md={6}>
-          <Search
-            setSearchedCity={setSearchedCity}
+      <Grid item container justifyContent="space-between" spacing={2}>
+        <Grid
+          container
+          justifyContent="center"
+          sx={{ paddingLeft: { xs: '1em', sm: '0' } }}
+        >
+          <Grid item xs={12} sm={8} md={6}>
+            <Search
+              setSearchedCity={setSearchedCity}
+              filteredAttractionsInCities={filteredAttractionsInCities}
+              cityOptions={cityOptions}
+              setCityOptions={setCityOptions}
+            />
+          </Grid>
+        </Grid>
+        <Grid item xs={12} lg={9}>
+          <CityMap
             filteredAttractionsInCities={filteredAttractionsInCities}
-            cityOptions={cityOptions}
-            setCityOptions={setCityOptions}
+            cityFilter={cityFilter}
+            mapLayers={mapLayers}
+            mapViewport={mapViewport}
+            setMapViewport={setMapViewport}
+            isDarkMode={isDarkMode}
           />
         </Grid>
+        <Grid item xs={12} lg={3}>
+          {filteredAttractionsInCities.length > 0 && (
+            <>
+              <Grid
+                container
+                justifyContent="space-between"
+                spacing={2}
+                sx={{ marginTop: { xs: '0.5em', lg: '0em' } }}
+              >
+                <Grid item xs={12} sm={6} lg={12}>
+                  <CityFilter
+                    filteredAttractionsInCities={filteredAttractionsInCities}
+                    setCityFilter={setCityFilter}
+                    cityFilter={cityFilter}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={12}>
+                  <MapLayerSelect
+                    setMapLayers={setMapLayers}
+                    mapLayers={mapLayers}
+                  />
+                </Grid>
+                <Grid item container justifyContent="flex-end" spacing={2}>
+                  <Grid item>
+                    <Button
+                      variant="outlined"
+                      onClick={handleResetFilters}
+                      color="warning"
+                    >
+                      Reset map & filters
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setIsModalOpen(true)}
+                      color="error"
+                    >
+                      Clear all data
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </>
+          )}
+        </Grid>
       </Grid>
-      <CityMap
-        filteredAttractionsInCities={filteredAttractionsInCities}
-        cityFilter={cityFilter}
-        mapLayers={mapLayers}
-        mapViewport={mapViewport}
-        setMapViewport={setMapViewport}
-        isDarkMode={isDarkMode}
-      />
-      {filteredAttractionsInCities.length > 0 && (
-        <>
-          <MapLegend />
-          <Grid
-            container
-            justifyContent="space-between"
-            spacing={2}
-            sx={{ marginTop: '0.5em' }}
-          >
-            <Grid item xs={12} sm={6}>
-              <CityFilter
-                filteredAttractionsInCities={filteredAttractionsInCities}
-                setCityFilter={setCityFilter}
-                cityFilter={cityFilter}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <MapLayerSelect
-                setMapLayers={setMapLayers}
-                mapLayers={mapLayers}
-              />
-            </Grid>
-            <Grid item container justifyContent="flex-end" spacing={2}>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  onClick={handleResetFilters}
-                  color="warning"
-                >
-                  Reset map & filters
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  onClick={() => setIsModalOpen(true)}
-                  color="error"
-                >
-                  Clear all data
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-        </>
-      )}
     </>
   )
 }
