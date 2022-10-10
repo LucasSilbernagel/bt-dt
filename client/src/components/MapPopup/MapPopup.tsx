@@ -34,7 +34,10 @@ const MapPopup = (props: CityMapProps) => {
           }/${popupInfo.cityWithAttractions.attractions.length}`}</span>
         </Typography>
         <Typography sx={{ marginTop: '0.5em', color: 'black' }}>
-          <Link to={`/city/${popupInfo.cityWithAttractions.city.placeId}`}>
+          <Link
+            to={`/city/${popupInfo.cityWithAttractions.city.placeId}`}
+            aria-label={`edit ${popupInfo.cityWithAttractions.city.formattedName}`}
+          >
             <Tooltip arrow title="Edit city">
               <EditIcon sx={{ fontSize: '1.2rem' }} />
             </Tooltip>
@@ -66,6 +69,7 @@ const MapPopup = (props: CityMapProps) => {
                 href={popupInfo.attraction.webLink}
                 target="_blank"
                 rel="noreferrer"
+                aria-label={`about ${popupInfo.attraction.formattedName}`}
               >
                 <Tooltip arrow title={popupInfo.attraction.webLink}>
                   <InfoIcon sx={{ fontSize: '1.2rem' }} />
@@ -75,7 +79,10 @@ const MapPopup = (props: CityMapProps) => {
           </Grid>
           <Grid item>
             <Typography sx={{ marginTop: '0.5em' }}>
-              <Link to={`/city/${popupInfo.cityWithAttractions.city.placeId}`}>
+              <Link
+                to={`/city/${popupInfo.cityWithAttractions.city.placeId}`}
+                aria-label={`edit ${popupInfo.cityWithAttractions.city.formattedName}`}
+              >
                 <Tooltip arrow title="Edit city">
                   <EditIcon sx={{ fontSize: '1.2rem' }} />
                 </Tooltip>
