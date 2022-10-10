@@ -1,12 +1,15 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@mui/material'
+import { darkModeState } from '../../state'
+import { useReactiveVar } from '@apollo/client'
 
 interface HeaderProps {
-  isDarkMode: boolean
   handleThemeChange: () => void
 }
 
 const Header = (props: HeaderProps) => {
-  const { isDarkMode, handleThemeChange } = props
+  const { handleThemeChange } = props
+
+  const isDarkMode = useReactiveVar(darkModeState)
 
   return (
     <>

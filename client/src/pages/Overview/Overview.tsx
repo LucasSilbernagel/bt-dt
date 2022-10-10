@@ -16,7 +16,6 @@ interface OverviewProps {
   >
   cityFilter: string | null
   setCityFilter: Dispatch<SetStateAction<string | null>>
-  isDarkMode: boolean
 }
 
 const Overview = (props: OverviewProps) => {
@@ -26,7 +25,6 @@ const Overview = (props: OverviewProps) => {
     setFilteredCitiesWithAttractions,
     cityFilter,
     setCityFilter,
-    isDarkMode,
   } = props
 
   /** Options for the add/edit city autocomplete */
@@ -88,7 +86,6 @@ const Overview = (props: OverviewProps) => {
             mapLayers={mapLayers}
             mapViewport={mapViewport}
             setMapViewport={setMapViewport}
-            isDarkMode={isDarkMode}
           />
         </Grid>
         <Grid item xs={12} lg={3}>

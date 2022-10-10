@@ -1,11 +1,9 @@
 import { Divider, Grid, Typography } from '@mui/material'
+import { darkModeState } from '../../state'
+import { useReactiveVar } from '@apollo/client'
 
-interface FooterProps {
-  isDarkMode: boolean
-}
-
-const Footer = (props: FooterProps) => {
-  const { isDarkMode } = props
+const Footer = () => {
+  const isDarkMode = useReactiveVar(darkModeState)
 
   return (
     <Grid item>

@@ -6,11 +6,12 @@ import Overview from '../pages/Overview'
 import { useState, useEffect } from 'react'
 import { ICity, IAttraction, ICityWithAttractions } from '../types'
 import { useLazyQuery } from '@apollo/react-hooks'
-import { gql } from '@apollo/client'
+import { gql, useReactiveVar } from '@apollo/client'
 import cloneDeep from 'lodash.clonedeep'
 import City from '../pages/City'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { darkModeState } from '../state'
 
 const GET_ATTRACTIONS = gql`
   query getAttractions($placeId: String!) {
@@ -25,7 +26,7 @@ const GET_ATTRACTIONS = gql`
 
 const App: React.FC = () => {
   /** Whether or not the app is displayed in dark mode */
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
+  const isDarkMode = useReactiveVar(darkModeState)
   /** The city that is being searched */
   const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
   /** Array of cities with attraction data */
@@ -51,7 +52,7 @@ const App: React.FC = () => {
 
   const handleThemeChange = () => {
     localStorage.setItem('isDarkMode', JSON.stringify(!isDarkMode))
-    setIsDarkMode(!isDarkMode)
+    darkModeState(!isDarkMode)
   }
 
   /** When app first loads, fetch saved city data from localStorage */
@@ -72,9 +73,9 @@ const App: React.FC = () => {
   useEffect(() => {
     if (savedIsDarkMode !== null) {
       if (savedIsDarkMode === 'true') {
-        setIsDarkMode(true)
+        darkModeState(true)
       } else {
-        setIsDarkMode(false)
+        darkModeState(false)
       }
     }
   }, [])
@@ -163,7 +164,7 @@ const App: React.FC = () => {
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Grid container direction="column">
-        <Header isDarkMode={isDarkMode} handleThemeChange={handleThemeChange} />
+        <Header handleThemeChange={handleThemeChange} />
         <Box
           sx={{
             padding: '0em 1em 1em 1em',
@@ -195,7 +196,6 @@ const App: React.FC = () => {
                     }
                     cityFilter={cityFilter}
                     setCityFilter={setCityFilter}
-                    isDarkMode={isDarkMode}
                   />
                 }
               />
@@ -260,7 +260,7 @@ const App: React.FC = () => {
             </Routes>
           </Box>
         </Box>
-        <Footer isDarkMode={isDarkMode} />
+        <Footer />
       </Grid>
     </ThemeProvider>
   )

@@ -12,6 +12,8 @@ import MapPopup from '../MapPopup/MapPopup'
 import { Paper } from '@mui/material'
 import { DEFAULT_MAP_VIEWPORT } from '../../constants'
 import MapLegend from '../MapLegend/MapLegend'
+import { darkModeState } from '../../state'
+import { useReactiveVar } from '@apollo/client'
 
 interface CityMapProps {
   filteredCitiesWithAttractions: ICityWithAttractions[]
@@ -19,7 +21,6 @@ interface CityMapProps {
   mapLayers: string[] | null
   mapViewport: IMapViewport
   setMapViewport: Dispatch<SetStateAction<IMapViewport>>
-  isDarkMode: boolean
 }
 
 const CityMap = (props: CityMapProps) => {
@@ -29,8 +30,9 @@ const CityMap = (props: CityMapProps) => {
     mapLayers,
     mapViewport,
     setMapViewport,
-    isDarkMode,
   } = props
+
+  const isDarkMode = useReactiveVar(darkModeState)
 
   const mapRef = useRef<MapRef>(null)
 
