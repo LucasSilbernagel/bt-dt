@@ -3,7 +3,7 @@ import {
   IAttraction,
   IAttractionsInCity,
   ICity,
-} from '../types'
+} from '../../types'
 import {
   Backdrop,
   CircularProgress,
@@ -23,7 +23,7 @@ import cloneDeep from 'lodash.clonedeep'
 import InfoIcon from '@mui/icons-material/Info'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link, useNavigate } from 'react-router-dom'
-import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
 
 interface CityProps {
   cityAttraction?: IAttractionsInCity

@@ -8,20 +8,20 @@ import {
   Typography,
 } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
-import { lightTheme, darkTheme } from './themes'
+import { lightTheme, darkTheme } from '../themes'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
-import Overview from './pages/Overview'
+import Overview from '../pages/Overview'
 import { useState, useEffect } from 'react'
 import {
   ICity,
   AttractionsInCities,
   IAttraction,
   IAttractionsInCity,
-} from './types'
+} from '../types'
 import { useLazyQuery } from '@apollo/react-hooks'
 import { gql } from '@apollo/client'
 import cloneDeep from 'lodash.clonedeep'
-import City from './pages/City'
+import City from '../pages/City'
 
 const GET_ATTRACTIONS = gql`
   query getAttractions($placeId: String!) {

@@ -4,14 +4,14 @@ import {
   AttractionsInCities,
   IMapViewport,
   IAttractionsInCity,
-} from '../types'
-import CityMap from '../components/CityMap/CityMap'
-import Search from '../components/Search/Search'
-import CityFilter from '../components/CityFilter/CityFilter'
-import MapLayerSelect from '../components/MapLayerSelect/MapLayerSelect'
+} from '../../types'
+import CityMap from '../../components/CityMap/CityMap'
+import Search from '../../components/Search/Search'
+import CityFilter from '../../components/CityFilter/CityFilter'
+import MapLayerSelect from '../../components/MapLayerSelect/MapLayerSelect'
 import { Button, Grid } from '@mui/material'
-import { DEFAULT_MAP_LAYERS, DEFAULT_MAP_VIEWPORT } from '../constants'
-import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
+import { DEFAULT_MAP_LAYERS, DEFAULT_MAP_VIEWPORT } from '../../constants'
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
 
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
