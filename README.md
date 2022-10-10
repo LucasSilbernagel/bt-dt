@@ -41,6 +41,8 @@ SKIP_PREFLIGHT_CHECK = true
 DISABLE_ESLINT_PLUGIN = true
 ```
 
+The application map is built with Mapbox. Get an API key from [Mapbox](https://www.mapbox.com/) and add it to the `.env` file in the `client` folder.
+
 ### Start up the app
 
 To start up the app, make sure you are in the root folder and then run `npm run dev` in your terminal. This should start both the app's server and the front end in a single terminal window, and launch the app in a new browser tab. You are now running the app locally!

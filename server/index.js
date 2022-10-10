@@ -44,6 +44,7 @@ const resolvers = {
         `https://api.geoapify.com/v2/places?apiKey=${process.env.GEOAPIFY_KEY}&categories=tourism.attraction&conditions=named&lang=en&filter=place:${args.placeId}`
       )
       const formattedAttractions = attractions.data.features
+        /** Only return attractions that have a website or Wikipedia link */
         .filter(
           (attraction) =>
             attraction.properties.datasource.raw.wikipedia ||
