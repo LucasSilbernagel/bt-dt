@@ -17,13 +17,15 @@ interface CityFilterProps {
 const CityFilter = (props: CityFilterProps) => {
   const { filteredCitiesWithAttractions, setCityFilter, cityFilter } = props
 
+  /** Options for the city filter */
   const [cities, setCities] = useState<string[]>([])
 
+  /** Get options for the city filter from the list of saved cities */
   useEffect(() => {
     if (filteredCitiesWithAttractions) {
       setCities(
         filteredCitiesWithAttractions.map(
-          (attractionInCity) => attractionInCity.city.formattedName
+          (cityWithAttractions) => cityWithAttractions.city.formattedName
         )
       )
     }

@@ -5,16 +5,16 @@ import { IAttraction, ICityWithAttractions } from '../../types'
 
 interface MapIconProps {
   popupType: 'city' | 'attraction'
-  cityAttraction: ICityWithAttractions
+  cityWithAttractions: ICityWithAttractions
   handleClick: (
     e: any,
-    cityAttraction: ICityWithAttractions,
+    cityWithAttractions: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => void
   handleMapMarkerKeydown: (
     e: any,
-    cityAttraction: ICityWithAttractions,
+    cityWithAttractions: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => void
@@ -24,7 +24,7 @@ interface MapIconProps {
 const MapIcon = (props: MapIconProps) => {
   const {
     popupType,
-    cityAttraction,
+    cityWithAttractions,
     handleClick,
     handleMapMarkerKeydown,
     attraction,
@@ -33,7 +33,9 @@ const MapIcon = (props: MapIconProps) => {
   const getAttractionMarkerColour = (displayedAttraction: IAttraction) =>
     displayedAttraction.isVisited ? '#009E73' : '#E69F00'
 
-  const getCityMarkerColour = (displayedCityAttraction: ICityWithAttractions) => {
+  const getCityMarkerColour = (
+    displayedCityAttraction: ICityWithAttractions
+  ) => {
     if (
       displayedCityAttraction.attractions.every(
         (attraction) => attraction.isVisited
@@ -56,10 +58,10 @@ const MapIcon = (props: MapIconProps) => {
       <AttractionsIcon
         tabIndex={0}
         onClick={(e: any) =>
-          handleClick(e, cityAttraction, popupType, attraction)
+          handleClick(e, cityWithAttractions, popupType, attraction)
         }
         onKeyDown={(e: any) =>
-          handleMapMarkerKeydown(e, cityAttraction, popupType, attraction)
+          handleMapMarkerKeydown(e, cityWithAttractions, popupType, attraction)
         }
         sx={{ color: getAttractionMarkerColour(attraction) }}
       />
@@ -68,11 +70,14 @@ const MapIcon = (props: MapIconProps) => {
     return (
       <LocationCityIcon
         tabIndex={0}
-        onClick={(e: any) => handleClick(e, cityAttraction, popupType)}
+        onClick={(e: any) => handleClick(e, cityWithAttractions, popupType)}
         onKeyDown={(e: any) =>
-          handleMapMarkerKeydown(e, cityAttraction, popupType)
+          handleMapMarkerKeydown(e, cityWithAttractions, popupType)
         }
-        sx={{ fontSize: '2.5rem', color: getCityMarkerColour(cityAttraction) }}
+        sx={{
+          fontSize: '2rem',
+          color: getCityMarkerColour(cityWithAttractions),
+        }}
       />
     )
   }

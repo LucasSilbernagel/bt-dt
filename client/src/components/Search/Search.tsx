@@ -50,7 +50,7 @@ const Search = (props: OverviewProps) => {
       } else if (filteredCitiesWithAttractions.length > 0) {
         setCityOptions(
           filteredCitiesWithAttractions.map(
-            (attractionInCity) => attractionInCity.city
+            (cityWithAttractions) => cityWithAttractions.city
           )
         )
       } else {
@@ -60,7 +60,7 @@ const Search = (props: OverviewProps) => {
   }
 
   useEffect(() => {
-    /** Set the Autocomplete options to be unique cities */
+    /** Set the Autocomplete options from the API to be unique cities */
     if (data?.cities) {
       setCityOptions(
         data.cities.filter(
@@ -71,10 +71,11 @@ const Search = (props: OverviewProps) => {
             ) === index
         )
       )
+      /** If nothing has been searched, set the Autocomplete options to be the saved cities */
     } else if (filteredCitiesWithAttractions.length > 0) {
       setCityOptions(
         filteredCitiesWithAttractions.map(
-          (attractionInCity) => attractionInCity.city
+          (cityWithAttractions) => cityWithAttractions.city
         )
       )
     }

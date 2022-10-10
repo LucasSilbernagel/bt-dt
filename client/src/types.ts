@@ -19,7 +19,7 @@ export interface ICityWithAttractions {
 }
 
 export interface IPopup {
-  attractionsInCity: ICityWithAttractions
+  cityWithAttractions: ICityWithAttractions
   popupType: 'city' | 'attraction'
   attraction?: IAttraction
 }

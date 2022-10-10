@@ -18,23 +18,23 @@ const MapPopup = (props: CityMapProps) => {
     return (
       <Popup
         anchor="top"
-        longitude={Number(popupInfo.attractionsInCity.city.lon)}
-        latitude={Number(popupInfo.attractionsInCity.city.lat)}
+        longitude={Number(popupInfo.cityWithAttractions.city.lon)}
+        latitude={Number(popupInfo.cityWithAttractions.city.lat)}
         onClose={() => setPopupInfo(null)}
       >
         <Typography sx={{ fontWeight: 'bold', color: 'black' }}>
-          {popupInfo.attractionsInCity.city.formattedName}
+          {popupInfo.cityWithAttractions.city.formattedName}
         </Typography>
         <Typography sx={{ fontWeight: 'bold', color: 'black' }}>
           Attractions visited:{' '}
           <span style={{ fontWeight: 'normal' }}>{`${
-            popupInfo.attractionsInCity.attractions.filter(
+            popupInfo.cityWithAttractions.attractions.filter(
               (attraction) => attraction.isVisited
             ).length
-          }/${popupInfo.attractionsInCity.attractions.length}`}</span>
+          }/${popupInfo.cityWithAttractions.attractions.length}`}</span>
         </Typography>
         <Typography sx={{ marginTop: '0.5em', color: 'black' }}>
-          <Link to={`/city/${popupInfo.attractionsInCity.city.placeId}`}>
+          <Link to={`/city/${popupInfo.cityWithAttractions.city.placeId}`}>
             <Tooltip arrow title="Edit city">
               <EditIcon sx={{ fontSize: '1.2rem' }} />
             </Tooltip>
@@ -54,7 +54,7 @@ const MapPopup = (props: CityMapProps) => {
           {popupInfo.attraction.formattedName}
         </Typography>
         <Typography sx={{ color: 'black' }}>
-          {popupInfo.attractionsInCity.city.formattedName}
+          {popupInfo.cityWithAttractions.city.formattedName}
         </Typography>
         <Typography sx={{ color: 'black' }}>
           Visited: {popupInfo.attraction.isVisited ? 'Yes' : 'No'}
@@ -66,7 +66,6 @@ const MapPopup = (props: CityMapProps) => {
                 href={popupInfo.attraction.webLink}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`Wikipedia article about ${popupInfo.attraction.formattedName}`}
               >
                 <Tooltip arrow title={popupInfo.attraction.webLink}>
                   <InfoIcon sx={{ fontSize: '1.2rem' }} />
@@ -76,7 +75,7 @@ const MapPopup = (props: CityMapProps) => {
           </Grid>
           <Grid item>
             <Typography sx={{ marginTop: '0.5em' }}>
-              <Link to={`/city/${popupInfo.attractionsInCity.city.placeId}`}>
+              <Link to={`/city/${popupInfo.cityWithAttractions.city.placeId}`}>
                 <Tooltip arrow title="Edit city">
                   <EditIcon sx={{ fontSize: '1.2rem' }} />
                 </Tooltip>

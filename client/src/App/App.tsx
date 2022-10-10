@@ -146,7 +146,7 @@ const App: React.FC = () => {
     setFilteredCitiesWithAttractions(
       /** Filter out cities that don't have any attractions */
       citiesWithAttractions.filter(
-        (attractionInCity) => attractionInCity.attractions.length > 0
+        (cityWithAttractions) => cityWithAttractions.attractions.length > 0
       )
     )
     /** Filter by city */

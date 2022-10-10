@@ -41,6 +41,7 @@ const CityMap = (props: CityMapProps) => {
 
   const [popupInfo, setPopupInfo] = useState<IPopup | null>(null)
 
+  /** Set the dimensions of the map to fill its container */
   useEffect(() => {
     if (containerRef.current) {
       setHeight(containerRef.current.offsetHeight)
@@ -52,7 +53,8 @@ const CityMap = (props: CityMapProps) => {
   useEffect(() => {
     if (cityFilter) {
       const selectedCity = filteredCitiesWithAttractions.filter(
-        (cityAttraction) => cityAttraction.city.formattedName === cityFilter
+        (cityWithAttractions) =>
+          cityWithAttractions.city.formattedName === cityFilter
       )[0].city
       mapRef.current?.flyTo({
         center: [selectedCity.lon, selectedCity.lat],
@@ -66,25 +68,28 @@ const CityMap = (props: CityMapProps) => {
 
   const handleMapMarkerClick = (
     e: MapboxEvent<MouseEvent>,
-    cityAttraction: ICityWithAttractions,
+    cityWithAttractions: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => {
     e.originalEvent?.stopPropagation()
     if (attraction) {
       setPopupInfo({
-        attractionsInCity: cityAttraction,
+        cityWithAttractions: cityWithAttractions,
         popupType: popupType,
         attraction: attraction,
       })
     } else {
-      setPopupInfo({ attractionsInCity: cityAttraction, popupType: popupType })
+      setPopupInfo({
+        cityWithAttractions: cityWithAttractions,
+        popupType: popupType,
+      })
     }
   }
 
   const handleMapMarkerKeydown = (
     e: { key: string; preventDefault: () => void },
-    cityAttraction: ICityWithAttractions,
+    cityWithAttractions: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => {
@@ -92,13 +97,13 @@ const CityMap = (props: CityMapProps) => {
       e.preventDefault()
       if (attraction) {
         setPopupInfo({
-          attractionsInCity: cityAttraction,
+          cityWithAttractions: cityWithAttractions,
           popupType: popupType,
           attraction: attraction,
         })
       } else {
         setPopupInfo({
-          attractionsInCity: cityAttraction,
+          cityWithAttractions: cityWithAttractions,
           popupType: popupType,
         })
       }
@@ -106,17 +111,17 @@ const CityMap = (props: CityMapProps) => {
   }
 
   const CITY_MARKERS = filteredCitiesWithAttractions.map(
-    (cityAttraction, index) => (
+    (cityWithAttractions, index) => (
       <Marker
         key={`city-${index}`}
-        longitude={cityAttraction.city.lon}
-        latitude={cityAttraction.city.lat}
+        longitude={cityWithAttractions.city.lon}
+        latitude={cityWithAttractions.city.lat}
         anchor="bottom"
-        onClick={(e) => handleMapMarkerClick(e, cityAttraction, 'city')}
+        onClick={(e) => handleMapMarkerClick(e, cityWithAttractions, 'city')}
       >
         <MapIcon
           popupType="city"
-          cityAttraction={cityAttraction}
+          cityWithAttractions={cityWithAttractions}
           handleClick={handleMapMarkerClick}
           handleMapMarkerKeydown={handleMapMarkerKeydown}
         />
@@ -125,20 +130,25 @@ const CityMap = (props: CityMapProps) => {
   )
 
   const ATTRACTION_MARKERS = filteredCitiesWithAttractions.map(
-    (attractionInCity) =>
-      attractionInCity.attractions.map((attraction, index) => (
+    (cityWithAttractions) =>
+      cityWithAttractions.attractions.map((attraction, index) => (
         <Marker
           key={`attraction-${index}`}
           longitude={attraction.lon}
           latitude={attraction.lat}
           anchor="bottom"
           onClick={(e) =>
-            handleMapMarkerClick(e, attractionInCity, 'attraction', attraction)
+            handleMapMarkerClick(
+              e,
+              cityWithAttractions,
+              'attraction',
+              attraction
+            )
           }
         >
           <MapIcon
             popupType="attraction"
-            cityAttraction={attractionInCity}
+            cityWithAttractions={cityWithAttractions}
             handleClick={handleMapMarkerClick}
             handleMapMarkerKeydown={handleMapMarkerKeydown}
             attraction={attraction}
