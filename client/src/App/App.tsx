@@ -144,12 +144,7 @@ const App: React.FC = () => {
 
   /** Handle filters */
   useEffect(() => {
-    setFilteredCitiesWithAttractions(
-      /** Filter out cities that don't have any attractions */
-      citiesWithAttractions.filter(
-        (cityWithAttractions) => cityWithAttractions.attractions.length > 0
-      )
-    )
+    setFilteredCitiesWithAttractions(citiesWithAttractions)
     /** Filter by city */
     if (cityFilter) {
       setFilteredCitiesWithAttractions(() => {
