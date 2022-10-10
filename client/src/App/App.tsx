@@ -152,8 +152,11 @@ const App: React.FC = () => {
     )
     /** Filter by city */
     if (cityFilter) {
-      setFilteredCitiesWithAttractions((prevFilteredAttractionsInCities) =>
-        prevFilteredAttractionsInCities.filter(
+      const newFilteredCitiesWithAttractions = cloneDeep(
+        filteredCitiesWithAttractions
+      )
+      setFilteredCitiesWithAttractions(
+        newFilteredCitiesWithAttractions.filter(
           (selectedCity) => selectedCity.city.formattedName === cityFilter
         )
       )
