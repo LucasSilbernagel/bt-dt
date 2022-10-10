@@ -6,28 +6,28 @@ import {
   SyntheticEvent,
 } from 'react'
 import { Autocomplete, Paper, TextField } from '@mui/material'
-import { AttractionsInCities } from '../../types'
+import { ICityWithAttractions } from '../../types'
 
 interface CityFilterProps {
-  filteredAttractionsInCities: AttractionsInCities
+  filteredCitiesWithAttractions: ICityWithAttractions[]
   setCityFilter: Dispatch<SetStateAction<string | null>>
   cityFilter: string | null
 }
 
 const CityFilter = (props: CityFilterProps) => {
-  const { filteredAttractionsInCities, setCityFilter, cityFilter } = props
+  const { filteredCitiesWithAttractions, setCityFilter, cityFilter } = props
 
   const [cities, setCities] = useState<string[]>([])
 
   useEffect(() => {
-    if (filteredAttractionsInCities) {
+    if (filteredCitiesWithAttractions) {
       setCities(
-        filteredAttractionsInCities.map(
+        filteredCitiesWithAttractions.map(
           (attractionInCity) => attractionInCity.city.formattedName
         )
       )
     }
-  }, [filteredAttractionsInCities])
+  }, [filteredCitiesWithAttractions])
 
   const handleChange = (
     _event: SyntheticEvent<Element, Event>,

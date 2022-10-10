@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import LocationCityIcon from '@mui/icons-material/LocationCity'
 import AttractionsIcon from '@mui/icons-material/Attractions'
-import { IAttraction, IAttractionsInCity } from '../../types'
+import { IAttraction, ICityWithAttractions } from '../../types'
 
 interface MapIconProps {
   popupType: 'city' | 'attraction'
-  cityAttraction: IAttractionsInCity
+  cityAttraction: ICityWithAttractions
   handleClick: (
     e: any,
-    cityAttraction: IAttractionsInCity,
+    cityAttraction: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => void
   handleMapMarkerKeydown: (
     e: any,
-    cityAttraction: IAttractionsInCity,
+    cityAttraction: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => void
@@ -33,7 +33,7 @@ const MapIcon = (props: MapIconProps) => {
   const getAttractionMarkerColour = (displayedAttraction: IAttraction) =>
     displayedAttraction.isVisited ? '#009E73' : '#E69F00'
 
-  const getCityMarkerColour = (displayedCityAttraction: IAttractionsInCity) => {
+  const getCityMarkerColour = (displayedCityAttraction: ICityWithAttractions) => {
     if (
       displayedCityAttraction.attractions.every(
         (attraction) => attraction.isVisited

@@ -8,7 +8,7 @@ import {
   Dispatch,
 } from 'react'
 import { Autocomplete, Paper, TextField } from '@mui/material'
-import { AttractionsInCities, ICity } from '../../types'
+import { ICity, ICityWithAttractions } from '../../types'
 
 const GET_CITIES = gql`
   query getCities($cityName: String!) {
@@ -23,7 +23,7 @@ const GET_CITIES = gql`
 
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
-  filteredAttractionsInCities: AttractionsInCities
+  filteredCitiesWithAttractions: ICityWithAttractions[]
   cityOptions: ICity[]
   setCityOptions: Dispatch<SetStateAction<ICity[]>>
 }
@@ -31,7 +31,7 @@ interface OverviewProps {
 const Search = (props: OverviewProps) => {
   const {
     setSearchedCity,
-    filteredAttractionsInCities,
+    filteredCitiesWithAttractions,
     cityOptions,
     setCityOptions,
   } = props
@@ -47,9 +47,9 @@ const Search = (props: OverviewProps) => {
     setTimeout(() => {
       if (value && value.length > 2) {
         getCities({ variables: { cityName: value } })
-      } else if (filteredAttractionsInCities.length > 0) {
+      } else if (filteredCitiesWithAttractions.length > 0) {
         setCityOptions(
-          filteredAttractionsInCities.map(
+          filteredCitiesWithAttractions.map(
             (attractionInCity) => attractionInCity.city
           )
         )
@@ -71,14 +71,14 @@ const Search = (props: OverviewProps) => {
             ) === index
         )
       )
-    } else if (filteredAttractionsInCities.length > 0) {
+    } else if (filteredCitiesWithAttractions.length > 0) {
       setCityOptions(
-        filteredAttractionsInCities.map(
+        filteredCitiesWithAttractions.map(
           (attractionInCity) => attractionInCity.city
         )
       )
     }
-  }, [data, data?.cities, filteredAttractionsInCities])
+  }, [data, data?.cities, filteredCitiesWithAttractions])
 
   /** Save the searched city to state */
   const handleSearch = (

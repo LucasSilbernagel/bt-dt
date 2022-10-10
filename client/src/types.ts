@@ -13,15 +13,13 @@ export interface IAttraction {
   isVisited: boolean
 }
 
-export interface IAttractionsInCity {
+export interface ICityWithAttractions {
   city: ICity
   attractions: IAttraction[]
 }
 
-export type AttractionsInCities = IAttractionsInCity[]
-
 export interface IPopup {
-  attractionsInCity: IAttractionsInCity
+  attractionsInCity: ICityWithAttractions
   popupType: 'city' | 'attraction'
   attraction?: IAttraction
 }

@@ -1,10 +1,5 @@
 import { SetStateAction, Dispatch, useState } from 'react'
-import {
-  ICity,
-  AttractionsInCities,
-  IMapViewport,
-  IAttractionsInCity,
-} from '../../types'
+import { ICity, IMapViewport, ICityWithAttractions } from '../../types'
 import CityMap from '../../components/CityMap/CityMap'
 import Search from '../../components/Search/Search'
 import CityFilter from '../../components/CityFilter/CityFilter'
@@ -15,8 +10,10 @@ import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
 
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
-  filteredAttractionsInCities: AttractionsInCities
-  setFilteredAttractionsInCities: Dispatch<SetStateAction<IAttractionsInCity[]>>
+  filteredCitiesWithAttractions: ICityWithAttractions[]
+  setFilteredCitiesWithAttractions: Dispatch<
+    SetStateAction<ICityWithAttractions[]>
+  >
   cityFilter: string | null
   setCityFilter: Dispatch<SetStateAction<string | null>>
   isDarkMode: boolean
@@ -25,20 +22,21 @@ interface OverviewProps {
 const Overview = (props: OverviewProps) => {
   const {
     setSearchedCity,
-    filteredAttractionsInCities,
-    setFilteredAttractionsInCities,
+    filteredCitiesWithAttractions,
+    setFilteredCitiesWithAttractions,
     cityFilter,
     setCityFilter,
     isDarkMode,
   } = props
 
+  /** Options for the add/edit city autocomplete */
   const [cityOptions, setCityOptions] = useState<ICity[]>([])
-
+  /** Map layers to display */
   const [mapLayers, setMapLayers] = useState<string[]>(DEFAULT_MAP_LAYERS)
-
+  /** The map viewport settings */
   const [mapViewport, setMapViewport] =
     useState<IMapViewport>(DEFAULT_MAP_VIEWPORT)
-
+  /** Whether or not the modal is open */
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const handleResetFilters = () => {
@@ -50,9 +48,9 @@ const Overview = (props: OverviewProps) => {
   const clearAllData = () => {
     handleResetFilters()
     setSearchedCity(null)
-    setFilteredAttractionsInCities([])
+    setFilteredCitiesWithAttractions([])
     setCityOptions([])
-    localStorage.removeItem('attractionsInCities')
+    localStorage.removeItem('citiesWithAttractions')
     setIsModalOpen(false)
   }
 
@@ -73,7 +71,7 @@ const Overview = (props: OverviewProps) => {
           <Grid item xs={12} sm={8} md={6}>
             <Search
               setSearchedCity={setSearchedCity}
-              filteredAttractionsInCities={filteredAttractionsInCities}
+              filteredCitiesWithAttractions={filteredCitiesWithAttractions}
               cityOptions={cityOptions}
               setCityOptions={setCityOptions}
             />
@@ -81,7 +79,7 @@ const Overview = (props: OverviewProps) => {
         </Grid>
         <Grid item xs={12} lg={9}>
           <CityMap
-            filteredAttractionsInCities={filteredAttractionsInCities}
+            filteredCitiesWithAttractions={filteredCitiesWithAttractions}
             cityFilter={cityFilter}
             mapLayers={mapLayers}
             mapViewport={mapViewport}
@@ -90,7 +88,7 @@ const Overview = (props: OverviewProps) => {
           />
         </Grid>
         <Grid item xs={12} lg={3}>
-          {filteredAttractionsInCities.length > 0 && (
+          {filteredCitiesWithAttractions.length > 0 && (
             <>
               <Grid
                 container
@@ -100,7 +98,9 @@ const Overview = (props: OverviewProps) => {
               >
                 <Grid item xs={12} sm={6} lg={12}>
                   <CityFilter
-                    filteredAttractionsInCities={filteredAttractionsInCities}
+                    filteredCitiesWithAttractions={
+                      filteredCitiesWithAttractions
+                    }
                     setCityFilter={setCityFilter}
                     cityFilter={cityFilter}
                   />

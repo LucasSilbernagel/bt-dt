@@ -1,27 +1,16 @@
-import {
-  Box,
-  CssBaseline,
-  Divider,
-  FormControlLabel,
-  Grid,
-  Switch,
-  Typography,
-} from '@mui/material'
+import { Box, CssBaseline, Grid } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import { lightTheme, darkTheme } from '../themes'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Overview from '../pages/Overview'
 import { useState, useEffect } from 'react'
-import {
-  ICity,
-  AttractionsInCities,
-  IAttraction,
-  IAttractionsInCity,
-} from '../types'
+import { ICity, IAttraction, ICityWithAttractions } from '../types'
 import { useLazyQuery } from '@apollo/react-hooks'
 import { gql } from '@apollo/client'
 import cloneDeep from 'lodash.clonedeep'
 import City from '../pages/City'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const GET_ATTRACTIONS = gql`
   query getAttractions($placeId: String!) {
@@ -35,15 +24,21 @@ const GET_ATTRACTIONS = gql`
 `
 
 const App: React.FC = () => {
+  /** Whether or not the app is displayed in dark mode */
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
+  /** The city that is being searched */
   const [searchedCity, setSearchedCity] = useState<ICity | null>(null)
-  const [attractionsInCities, setAttractionsInCities] = useState<
-    IAttractionsInCity[]
+  /** Array of cities with attraction data */
+  const [citiesWithAttractions, setCitiesWithAttractions] = useState<
+    ICityWithAttractions[]
   >([])
-  const [filteredAttractionsInCities, setFilteredAttractionsInCities] =
-    useState<IAttractionsInCity[]>([])
+  /** Array of cities with attraction data, filtered */
+  const [filteredCitiesWithAttractions, setFilteredCitiesWithAttractions] =
+    useState<ICityWithAttractions[]>([])
+  /** The city filter that has been selected */
   const [cityFilter, setCityFilter] = useState<string | null>(null)
-  const savedDarkMode = localStorage.getItem('isDarkMode')
+  /** The user's theme setting, saved in localStorage */
+  const savedIsDarkMode = localStorage.getItem('isDarkMode')
 
   const navigate = useNavigate()
 
@@ -59,22 +54,24 @@ const App: React.FC = () => {
     setIsDarkMode(!isDarkMode)
   }
 
-  /** When app first loads, fetch existing city attraction data from localStorage */
+  /** When app first loads, fetch saved city data from localStorage */
   useEffect(() => {
-    const fetchedCityAttractions = localStorage.getItem('attractionsInCities')
+    const fetchedCitiesWithAttractions = localStorage.getItem(
+      'citiesWithAttractions'
+    )
     if (
-      fetchedCityAttractions !== null &&
-      !attractionsInCities.length &&
-      !filteredAttractionsInCities.length
+      fetchedCitiesWithAttractions !== null &&
+      !citiesWithAttractions.length &&
+      !filteredCitiesWithAttractions.length
     ) {
-      setAttractionsInCities(JSON.parse(fetchedCityAttractions))
+      setCitiesWithAttractions(JSON.parse(fetchedCitiesWithAttractions))
     }
   }, [])
 
   /** Remember user preference for dark or light theme */
   useEffect(() => {
-    if (savedDarkMode !== null) {
-      if (savedDarkMode === 'true') {
+    if (savedIsDarkMode !== null) {
+      if (savedIsDarkMode === 'true') {
         setIsDarkMode(true)
       } else {
         setIsDarkMode(false)
@@ -86,16 +83,16 @@ const App: React.FC = () => {
   useEffect(() => {
     if (
       searchedCity &&
-      !filteredAttractionsInCities.find(
-        (cityAttraction) =>
-          cityAttraction.city.formattedName === searchedCity.formattedName
+      !filteredCitiesWithAttractions.find(
+        (savedCity) =>
+          savedCity.city.formattedName === searchedCity.formattedName
       )
     ) {
       getAttractions()
     }
-  }, [searchedCity, filteredAttractionsInCities])
+  }, [searchedCity, filteredCitiesWithAttractions])
 
-  /** If the searched city is not already saved, add it to the filteredAttractionsInCities list */
+  /** If the searched city is not already saved, add it to the filteredCitiesWithAttractions list */
   useEffect(() => {
     if (
       !loading &&
@@ -103,39 +100,39 @@ const App: React.FC = () => {
       data &&
       data.attractions.length > 0 &&
       searchedCity &&
-      !filteredAttractionsInCities.find(
-        (cityAttraction) =>
-          cityAttraction.city.formattedName === searchedCity.formattedName
+      !filteredCitiesWithAttractions.find(
+        (newCity) => newCity.city.formattedName === searchedCity.formattedName
       )
     ) {
-      setFilteredAttractionsInCities(() => {
-        const newAttractionsInCities: AttractionsInCities = cloneDeep(
-          filteredAttractionsInCities
+      setFilteredCitiesWithAttractions(() => {
+        const newCitiesWithAttractions: ICityWithAttractions[] = cloneDeep(
+          filteredCitiesWithAttractions
         )
-        newAttractionsInCities.push({
+        newCitiesWithAttractions.push({
           city: searchedCity,
           attractions: data.attractions.map((attraction: IAttraction) => {
             return { ...attraction, isVisited: false }
           }),
         })
-        return newAttractionsInCities
+        return newCitiesWithAttractions
       })
     }
-  }, [loading, error, data, searchedCity, filteredAttractionsInCities])
+  }, [loading, error, data, searchedCity, filteredCitiesWithAttractions])
 
-  /** When the filteredAttractionsInCities list is updated, also update localStorage */
+  /** When the filteredCitiesWithAttractions list is updated, also update localStorage */
   useEffect(() => {
-    if (filteredAttractionsInCities.length > 0) {
+    if (filteredCitiesWithAttractions.length > 0) {
       localStorage.setItem(
-        'attractionsInCities',
+        'citiesWithAttractions',
         JSON.stringify(
-          filteredAttractionsInCities.filter(
-            (attractionInCity) => attractionInCity.attractions.length > 0
+          /** Don't save cities that don't have any attractions */
+          filteredCitiesWithAttractions.filter(
+            (cityWithAttractions) => cityWithAttractions.attractions.length > 0
           )
         )
       )
     }
-  }, [filteredAttractionsInCities])
+  }, [filteredCitiesWithAttractions])
 
   /** When a city is searched, navigate to the city page. */
   useEffect(() => {
@@ -146,49 +143,32 @@ const App: React.FC = () => {
 
   /** Handle filters */
   useEffect(() => {
-    setFilteredAttractionsInCities(
-      attractionsInCities.filter(
+    setFilteredCitiesWithAttractions(
+      /** Filter out cities that don't have any attractions */
+      citiesWithAttractions.filter(
         (attractionInCity) => attractionInCity.attractions.length > 0
       )
     )
+    /** Filter by city */
     if (cityFilter) {
-      setFilteredAttractionsInCities((prevFilteredAttractionsInCities) =>
+      setFilteredCitiesWithAttractions((prevFilteredAttractionsInCities) =>
         prevFilteredAttractionsInCities.filter(
-          (attractionInCity) =>
-            attractionInCity.city.formattedName === cityFilter
+          (selectedCity) => selectedCity.city.formattedName === cityFilter
         )
       )
     }
-  }, [attractionsInCities, cityFilter])
+  }, [citiesWithAttractions, cityFilter])
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Grid container direction="column">
-        <Grid item container justifyContent="flex-end">
-          <Grid item sx={{ paddingTop: '1em', paddingBottom: '1em' }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  color="default"
-                  checked={isDarkMode}
-                  onClick={handleThemeChange}
-                />
-              }
-              label={
-                isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'
-              }
-            />
-          </Grid>
-        </Grid>
-        <Typography
-          variant="h1"
-          sx={{ textAlign: 'center', marginBottom: '20px' }}
-        >
-          Been there, done that!
-        </Typography>
+        <Header isDarkMode={isDarkMode} handleThemeChange={handleThemeChange} />
         <Box
-          sx={{ paddingLeft: '1em', paddingRight: '1em', paddingBottom: '1em' }}
+          sx={{
+            padding: '0em 1em 1em 1em',
+            minHeight: '100vh',
+          }}
         >
           <Box
             sx={{
@@ -203,9 +183,11 @@ const App: React.FC = () => {
                 element={
                   <Overview
                     setSearchedCity={setSearchedCity}
-                    filteredAttractionsInCities={filteredAttractionsInCities}
-                    setFilteredAttractionsInCities={
-                      setFilteredAttractionsInCities
+                    filteredCitiesWithAttractions={
+                      filteredCitiesWithAttractions
+                    }
+                    setFilteredCitiesWithAttractions={
+                      setFilteredCitiesWithAttractions
                     }
                     cityFilter={cityFilter}
                     setCityFilter={setCityFilter}
@@ -224,26 +206,28 @@ const App: React.FC = () => {
                     }}
                   >
                     <City
-                      cityAttraction={filteredAttractionsInCities.find(
-                        (attractionInCity) =>
-                          attractionInCity.city.formattedName ===
+                      city={filteredCitiesWithAttractions.find(
+                        (cityWithAttractions) =>
+                          cityWithAttractions.city.formattedName ===
                           searchedCity?.formattedName
                       )}
                       loading={loading}
-                      filteredAttractionsInCities={filteredAttractionsInCities}
-                      setFilteredAttractionsInCities={
-                        setFilteredAttractionsInCities
+                      filteredCitiesWithAttractions={
+                        filteredCitiesWithAttractions
+                      }
+                      setFilteredCitiesWithAttractions={
+                        setFilteredCitiesWithAttractions
                       }
                       setSearchedCity={setSearchedCity}
                     />
                   </Box>
                 }
               />
-              {filteredAttractionsInCities.map((attractionInCity) => {
+              {filteredCitiesWithAttractions.map((cityWithAttractions) => {
                 return (
                   <Route
-                    key={attractionInCity.city.placeId}
-                    path={`/city/${attractionInCity.city.placeId}`}
+                    key={cityWithAttractions.city.placeId}
+                    path={`/city/${cityWithAttractions.city.placeId}`}
                     element={
                       <Box
                         sx={{
@@ -253,13 +237,13 @@ const App: React.FC = () => {
                         }}
                       >
                         <City
-                          cityAttraction={attractionInCity}
+                          city={cityWithAttractions}
                           loading={loading}
-                          filteredAttractionsInCities={
-                            filteredAttractionsInCities
+                          filteredCitiesWithAttractions={
+                            filteredCitiesWithAttractions
                           }
-                          setFilteredAttractionsInCities={
-                            setFilteredAttractionsInCities
+                          setFilteredCitiesWithAttractions={
+                            setFilteredCitiesWithAttractions
                           }
                           setSearchedCity={setSearchedCity}
                         />
@@ -272,22 +256,7 @@ const App: React.FC = () => {
             </Routes>
           </Box>
         </Box>
-        <Grid item>
-          <Divider sx={{ marginTop: '2em' }} />
-          <Typography
-            sx={{ textAlign: 'center', marginTop: '1em', marginBottom: '1em' }}
-          >
-            Built by{' '}
-            <a
-              href="https://lucassilbernagel.com/"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: isDarkMode ? 'white' : 'black' }}
-            >
-              Lucas Silbernagel
-            </a>
-          </Typography>
-        </Grid>
+        <Footer isDarkMode={isDarkMode} />
       </Grid>
     </ThemeProvider>
   )

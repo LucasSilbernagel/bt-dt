@@ -1,9 +1,4 @@
-import {
-  AttractionsInCities,
-  IAttraction,
-  IAttractionsInCity,
-  ICity,
-} from '../../types'
+import { IAttraction, ICityWithAttractions, ICity } from '../../types'
 import {
   Backdrop,
   CircularProgress,
@@ -26,49 +21,50 @@ import { Link, useNavigate } from 'react-router-dom'
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
 
 interface CityProps {
-  cityAttraction?: IAttractionsInCity
+  city?: ICityWithAttractions
   loading: boolean
-  filteredAttractionsInCities: IAttractionsInCity[]
-  setFilteredAttractionsInCities: Dispatch<
-    SetStateAction<AttractionsInCities | []>
+  filteredCitiesWithAttractions: ICityWithAttractions[]
+  setFilteredCitiesWithAttractions: Dispatch<
+    SetStateAction<ICityWithAttractions[] | []>
   >
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
 }
 
 const City = (props: CityProps) => {
   const {
-    cityAttraction,
+    city,
     loading,
-    filteredAttractionsInCities,
-    setFilteredAttractionsInCities,
+    filteredCitiesWithAttractions,
+    setFilteredCitiesWithAttractions,
     setSearchedCity,
   } = props
 
   const navigate = useNavigate()
 
+  /** The list of attractions to display on the city page */
   const [attractionList, setAttractionList] = useState<IAttraction[]>([])
-
+  /** Whether or not the modal is open */
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   /** Get the list of attractions for the selected city */
   useEffect(() => {
-    if (cityAttraction) {
-      setAttractionList(cityAttraction.attractions)
+    if (city) {
+      setAttractionList(city.attractions)
     }
-  }, [cityAttraction])
+  }, [city])
 
   /** Update the list of attractions for the selected city as they are checked or unchecked */
   useEffect(() => {
     if (attractionList.length > 0) {
-      const newAttractionsInCities = cloneDeep(filteredAttractionsInCities)
-      setFilteredAttractionsInCities(
-        newAttractionsInCities.map((attractionInCity) => {
+      const newCitiesWithAttractions = cloneDeep(filteredCitiesWithAttractions)
+      setFilteredCitiesWithAttractions(
+        newCitiesWithAttractions.map((cityWithAttractions) => {
           return {
-            ...attractionInCity,
+            ...cityWithAttractions,
             attractions:
-              attractionInCity.city.placeId === cityAttraction?.city.placeId
+              cityWithAttractions.city.placeId === city?.city.placeId
                 ? attractionList
-                : attractionInCity.attractions,
+                : cityWithAttractions.attractions,
           }
         })
       )
@@ -91,15 +87,15 @@ const City = (props: CityProps) => {
   }
 
   const deleteCity = () => {
-    const newAttractionsInCities = cloneDeep(filteredAttractionsInCities)
-    const remainingAttractionsInCities = newAttractionsInCities.filter(
-      (attractionInCity) =>
-        attractionInCity.city.placeId !== cityAttraction?.city.placeId
+    const newCitiesWithAttractions = cloneDeep(filteredCitiesWithAttractions)
+    const remainingCitiesWithAttractions = newCitiesWithAttractions.filter(
+      (cityWithAttractions) =>
+        cityWithAttractions.city.placeId !== city?.city.placeId
     )
-    setFilteredAttractionsInCities(remainingAttractionsInCities)
+    setFilteredCitiesWithAttractions(remainingCitiesWithAttractions)
     localStorage.setItem(
-      'attractionsInCities',
-      JSON.stringify(remainingAttractionsInCities)
+      'citiesWithAttractions',
+      JSON.stringify(remainingCitiesWithAttractions)
     )
     setSearchedCity(null)
     navigate('/')
@@ -108,7 +104,7 @@ const City = (props: CityProps) => {
 
   if (loading) {
     return (
-      <Backdrop sx={{ color: '#fff' }} open={true}>
+      <Backdrop sx={{ color: 'white' }} open={true}>
         <CircularProgress color="inherit" />
       </Backdrop>
     )
@@ -119,7 +115,7 @@ const City = (props: CityProps) => {
           isModalOpen={isModalOpen}
           handleCloseModal={() => setIsModalOpen(false)}
           handleConfirm={deleteCity}
-          confirmMessage={`Are you sure you want to delete ${cityAttraction?.city.formattedName}?`}
+          confirmMessage={`Are you sure you want to delete ${city?.city.formattedName}?`}
         />
         <Grid container justifyContent="space-between">
           <Grid item>
@@ -144,9 +140,9 @@ const City = (props: CityProps) => {
             variant="h2"
             sx={{ textAlign: 'center', background: 'black', color: 'white' }}
           >
-            {cityAttraction?.city.formattedName}
+            {city?.city.formattedName}
           </Typography>
-          {cityAttraction && cityAttraction.attractions?.length > 0 ? (
+          {city && city.attractions?.length > 0 ? (
             <List sx={{ paddingBottom: '0' }}>
               {attractionList.map((attraction, index) => {
                 return (
@@ -168,7 +164,6 @@ const City = (props: CityProps) => {
                             href={attraction.webLink}
                             target="_blank"
                             rel="noreferrer"
-                            aria-label={`Wikipedia article about ${attraction.formattedName}`}
                           >
                             <InfoIcon color="info" />
                           </a>

@@ -2,9 +2,8 @@ import { Grid } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import Map, { MapboxEvent, Marker, MapRef } from 'react-map-gl'
 import {
-  AttractionsInCities,
   IAttraction,
-  IAttractionsInCity,
+  ICityWithAttractions,
   IMapViewport,
   IPopup,
 } from '../../types'
@@ -15,7 +14,7 @@ import { DEFAULT_MAP_VIEWPORT } from '../../constants'
 import MapLegend from '../MapLegend/MapLegend'
 
 interface CityMapProps {
-  filteredAttractionsInCities: AttractionsInCities
+  filteredCitiesWithAttractions: ICityWithAttractions[]
   cityFilter: string | null
   mapLayers: string[] | null
   mapViewport: IMapViewport
@@ -25,7 +24,7 @@ interface CityMapProps {
 
 const CityMap = (props: CityMapProps) => {
   const {
-    filteredAttractionsInCities,
+    filteredCitiesWithAttractions,
     cityFilter,
     mapLayers,
     mapViewport,
@@ -52,7 +51,7 @@ const CityMap = (props: CityMapProps) => {
   /** Zoom to selected city filter */
   useEffect(() => {
     if (cityFilter) {
-      const selectedCity = filteredAttractionsInCities.filter(
+      const selectedCity = filteredCitiesWithAttractions.filter(
         (cityAttraction) => cityAttraction.city.formattedName === cityFilter
       )[0].city
       mapRef.current?.flyTo({
@@ -67,7 +66,7 @@ const CityMap = (props: CityMapProps) => {
 
   const handleMapMarkerClick = (
     e: MapboxEvent<MouseEvent>,
-    cityAttraction: IAttractionsInCity,
+    cityAttraction: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => {
@@ -85,7 +84,7 @@ const CityMap = (props: CityMapProps) => {
 
   const handleMapMarkerKeydown = (
     e: { key: string; preventDefault: () => void },
-    cityAttraction: IAttractionsInCity,
+    cityAttraction: ICityWithAttractions,
     popupType: 'city' | 'attraction',
     attraction?: IAttraction
   ) => {
@@ -106,7 +105,7 @@ const CityMap = (props: CityMapProps) => {
     }
   }
 
-  const CITY_MARKERS = filteredAttractionsInCities.map(
+  const CITY_MARKERS = filteredCitiesWithAttractions.map(
     (cityAttraction, index) => (
       <Marker
         key={`city-${index}`}
@@ -125,7 +124,7 @@ const CityMap = (props: CityMapProps) => {
     )
   )
 
-  const ATTRACTION_MARKERS = filteredAttractionsInCities.map(
+  const ATTRACTION_MARKERS = filteredCitiesWithAttractions.map(
     (attractionInCity) =>
       attractionInCity.attractions.map((attraction, index) => (
         <Marker
