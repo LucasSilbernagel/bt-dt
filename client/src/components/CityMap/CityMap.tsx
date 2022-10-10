@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Grid, Paper } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import Map, { MapboxEvent, Marker, MapRef } from 'react-map-gl'
 import {
@@ -9,7 +9,6 @@ import {
 } from '../../types'
 import MapIcon from '../MapIcon/MapIcon'
 import MapPopup from '../MapPopup/MapPopup'
-import { Paper } from '@mui/material'
 import { DEFAULT_MAP_VIEWPORT } from '../../constants'
 import MapLegend from '../MapLegend/MapLegend'
 import { darkModeState } from '../../state'
