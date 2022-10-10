@@ -19,6 +19,8 @@ import InfoIcon from '@mui/icons-material/Info'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link, useNavigate } from 'react-router-dom'
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
+import { darkModeState } from '../../state'
+import { useReactiveVar } from '@apollo/client'
 
 interface CityProps {
   city?: ICityWithAttractions
@@ -40,6 +42,8 @@ const City = (props: CityProps) => {
   } = props
 
   const navigate = useNavigate()
+
+  const isDarkMode = useReactiveVar(darkModeState)
 
   /** The list of attractions to display on the city page */
   const [attractionList, setAttractionList] = useState<IAttraction[]>([])
@@ -182,6 +186,7 @@ const City = (props: CityProps) => {
                   href="https://apidocs.geoapify.com/docs/places/#about"
                   target="_blank"
                   rel="noreferrer"
+                  style={{ color: isDarkMode ? 'white' : 'black' }}
                 >
                   Geoapify places API
                 </a>{' '}
