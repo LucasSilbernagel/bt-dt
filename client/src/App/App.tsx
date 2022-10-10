@@ -167,12 +167,16 @@ const App: React.FC = () => {
         <Box
           sx={{
             padding: '0em 1em 1em 1em',
-            minHeight: '100vh',
+            minHeight: '80vh',
           }}
         >
           <Box
             sx={{
-              maxWidth: { xs: '800px', lg: '1200px' },
+              maxWidth: {
+                xs: '800px',
+                lg:
+                  filteredCitiesWithAttractions.length > 0 ? '1200px' : '800px',
+              },
               width: '100%',
               margin: '0 auto',
             }}

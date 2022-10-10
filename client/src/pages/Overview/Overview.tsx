@@ -77,7 +77,11 @@ const Overview = (props: OverviewProps) => {
             />
           </Grid>
         </Grid>
-        <Grid item xs={12} lg={9}>
+        <Grid
+          item
+          xs={12}
+          lg={filteredCitiesWithAttractions.length > 0 ? 9 : 12}
+        >
           <CityMap
             filteredCitiesWithAttractions={filteredCitiesWithAttractions}
             cityFilter={cityFilter}
