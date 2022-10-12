@@ -16,7 +16,7 @@ import { useReactiveVar } from '@apollo/client'
 
 interface CityMapProps {
   citiesWithAttractions: ICityWithAttractions[]
-  cityFilter: string | null
+  cityFilter: string
   mapLayers: string[] | null
   mapViewport: IMapViewport
   setMapViewport: Dispatch<SetStateAction<IMapViewport>>
@@ -35,12 +35,18 @@ const CityMap = (props: CityMapProps) => {
 
   const mapRef = useRef<MapRef>(null)
 
+  /** Ref for the map container */
   const containerRef = useRef<HTMLDivElement>(null)
 
+  /** The height of the map */
   const [height, setHeight] = useState(0)
+  /** The width of the map */
   const [width, setWidth] = useState(0)
 
   const [popupInfo, setPopupInfo] = useState<IPopup | null>(null)
+
+  /** The city that matches the city filter */
+  const [selectedCity, setSelectedCity] = useState<ICityWithAttractions>()
 
   /** Set the dimensions of the map to fill its container */
   useEffect(() => {
@@ -50,22 +56,39 @@ const CityMap = (props: CityMapProps) => {
     }
   }, [])
 
-  /** Zoom to selected city filter */
+  /** When the city filter is active, select the city that matches the filter */
   useEffect(() => {
-    if (cityFilter) {
-      const selectedCity = citiesWithAttractions.filter(
-        (cityWithAttractions) =>
-          cityWithAttractions.city.formattedName === cityFilter
-      )[0].city
-      mapRef.current?.flyTo({
-        center: [selectedCity.lon, selectedCity.lat],
-        duration: 2000,
-        zoom: 10,
-      })
+    if (
+      cityFilter.length > 0 &&
+      citiesWithAttractions.length > 0 &&
+      citiesWithAttractions.find((cityWithAttractions) =>
+        cityWithAttractions.city.formattedName.includes(cityFilter)
+      )
+    ) {
+      setSelectedCity(
+        citiesWithAttractions.find((cityWithAttractions) =>
+          cityWithAttractions.city.formattedName.includes(cityFilter)
+        )
+      )
     } else {
-      mapRef.current?.flyTo(DEFAULT_MAP_VIEWPORT)
+      setSelectedCity(undefined)
     }
-  }, [cityFilter])
+  }, [citiesWithAttractions, cityFilter])
+
+  /** Zoom to selected city */
+  useEffect(() => {
+    setTimeout(() => {
+      if (selectedCity) {
+        mapRef.current?.flyTo({
+          center: [selectedCity.city.lon, selectedCity.city.lat],
+          duration: 2000,
+          zoom: 10,
+        })
+      } else {
+        mapRef.current?.flyTo(DEFAULT_MAP_VIEWPORT)
+      }
+    }, 100)
+  }, [selectedCity])
 
   const handleMapMarkerClick = (
     e: MapboxEvent<MouseEvent>,
