@@ -164,6 +164,7 @@ const CityMap = (props: CityMapProps) => {
         <Paper elevation={3} sx={{ borderRadius: '5px', overflow: 'hidden' }}>
           <Map
             {...mapViewport}
+            reuseMaps
             ref={mapRef}
             onMove={(event) => setMapViewport(event.viewState)}
             mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
