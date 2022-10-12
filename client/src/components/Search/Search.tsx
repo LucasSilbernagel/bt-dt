@@ -23,7 +23,7 @@ const GET_CITIES = gql`
 
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
-  filteredCitiesWithAttractions: ICityWithAttractions[]
+  citiesWithAttractions: ICityWithAttractions[]
   cityOptions: ICity[]
   setCityOptions: Dispatch<SetStateAction<ICity[]>>
 }
@@ -31,7 +31,7 @@ interface OverviewProps {
 const Search = (props: OverviewProps) => {
   const {
     setSearchedCity,
-    filteredCitiesWithAttractions,
+    citiesWithAttractions,
     cityOptions,
     setCityOptions,
   } = props
@@ -47,9 +47,9 @@ const Search = (props: OverviewProps) => {
     setTimeout(() => {
       if (value && value.length > 2) {
         getCities({ variables: { cityName: value } })
-      } else if (filteredCitiesWithAttractions.length > 0) {
+      } else if (citiesWithAttractions.length > 0) {
         setCityOptions(
-          filteredCitiesWithAttractions.map(
+          citiesWithAttractions.map(
             (cityWithAttractions) => cityWithAttractions.city
           )
         )
@@ -72,14 +72,14 @@ const Search = (props: OverviewProps) => {
         )
       )
       /** If nothing has been searched, set the Autocomplete options to be the saved cities */
-    } else if (filteredCitiesWithAttractions.length > 0) {
+    } else if (citiesWithAttractions.length > 0) {
       setCityOptions(
-        filteredCitiesWithAttractions.map(
+        citiesWithAttractions.map(
           (cityWithAttractions) => cityWithAttractions.city
         )
       )
     }
-  }, [data, data?.cities, filteredCitiesWithAttractions])
+  }, [data, data?.cities, citiesWithAttractions])
 
   /** Save the searched city to state */
   const handleSearch = (

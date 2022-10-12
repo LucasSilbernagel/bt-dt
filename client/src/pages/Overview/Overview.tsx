@@ -10,23 +10,16 @@ import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
 
 interface OverviewProps {
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
-  filteredCitiesWithAttractions: ICityWithAttractions[]
-  setFilteredCitiesWithAttractions: Dispatch<
-    SetStateAction<ICityWithAttractions[]>
-  >
-  cityFilter: string | null
-  setCityFilter: Dispatch<SetStateAction<string | null>>
+  citiesWithAttractions: ICityWithAttractions[]
+  setCitiesWithAttractions: Dispatch<SetStateAction<ICityWithAttractions[]>>
 }
 
 const Overview = (props: OverviewProps) => {
-  const {
-    setSearchedCity,
-    filteredCitiesWithAttractions,
-    setFilteredCitiesWithAttractions,
-    cityFilter,
-    setCityFilter,
-  } = props
+  const { setSearchedCity, citiesWithAttractions, setCitiesWithAttractions } =
+    props
 
+  /** The city filter that has been selected */
+  const [cityFilter, setCityFilter] = useState<string>('')
   /** Options for the add/edit city autocomplete */
   const [cityOptions, setCityOptions] = useState<ICity[]>([])
   /** Map layers to display */
@@ -40,13 +33,13 @@ const Overview = (props: OverviewProps) => {
   const handleResetFilters = () => {
     setMapLayers(DEFAULT_MAP_LAYERS)
     setMapViewport(DEFAULT_MAP_VIEWPORT)
-    setCityFilter(null)
+    setCityFilter('')
   }
 
   const clearAllData = () => {
     handleResetFilters()
     setSearchedCity(null)
-    setFilteredCitiesWithAttractions([])
+    setCitiesWithAttractions([])
     setCityOptions([])
     localStorage.removeItem('citiesWithAttractions')
     setIsModalOpen(false)
@@ -69,19 +62,18 @@ const Overview = (props: OverviewProps) => {
           <Grid item xs={12} sm={8} md={6}>
             <Search
               setSearchedCity={setSearchedCity}
-              filteredCitiesWithAttractions={filteredCitiesWithAttractions}
+              citiesWithAttractions={citiesWithAttractions}
               cityOptions={cityOptions}
               setCityOptions={setCityOptions}
             />
           </Grid>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          lg={filteredCitiesWithAttractions.length > 0 ? 9 : 12}
-        >
+        <Grid item xs={12} lg={citiesWithAttractions.length > 0 ? 9 : 12}>
           <CityMap
-            filteredCitiesWithAttractions={filteredCitiesWithAttractions}
+            citiesWithAttractions={citiesWithAttractions.filter(
+              (cityWithAttraction) =>
+                cityWithAttraction.city.formattedName.includes(cityFilter)
+            )}
             cityFilter={cityFilter}
             mapLayers={mapLayers}
             mapViewport={mapViewport}
@@ -89,7 +81,7 @@ const Overview = (props: OverviewProps) => {
           />
         </Grid>
         <Grid item xs={12} lg={3}>
-          {filteredCitiesWithAttractions.length > 0 && (
+          {citiesWithAttractions.length > 0 && (
             <>
               <Grid
                 container
@@ -99,11 +91,8 @@ const Overview = (props: OverviewProps) => {
               >
                 <Grid item xs={12} sm={6} lg={12}>
                   <CityFilter
-                    filteredCitiesWithAttractions={
-                      filteredCitiesWithAttractions
-                    }
+                    citiesWithAttractions={citiesWithAttractions}
                     setCityFilter={setCityFilter}
-                    cityFilter={cityFilter}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} lg={12}>

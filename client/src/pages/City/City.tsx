@@ -25,8 +25,8 @@ import { useReactiveVar } from '@apollo/client'
 interface CityProps {
   city?: ICityWithAttractions
   loading: boolean
-  filteredCitiesWithAttractions: ICityWithAttractions[]
-  setFilteredCitiesWithAttractions: Dispatch<
+  citiesWithAttractions: ICityWithAttractions[]
+  setCitiesWithAttractions: Dispatch<
     SetStateAction<ICityWithAttractions[] | []>
   >
   setSearchedCity: Dispatch<SetStateAction<ICity | null>>
@@ -36,8 +36,8 @@ const City = (props: CityProps) => {
   const {
     city,
     loading,
-    filteredCitiesWithAttractions,
-    setFilteredCitiesWithAttractions,
+    citiesWithAttractions,
+    setCitiesWithAttractions,
     setSearchedCity,
   } = props
 
@@ -60,8 +60,8 @@ const City = (props: CityProps) => {
   /** Update the list of attractions for the selected city as they are checked or unchecked */
   useEffect(() => {
     if (attractionList.length > 0) {
-      const newCitiesWithAttractions = cloneDeep(filteredCitiesWithAttractions)
-      setFilteredCitiesWithAttractions(
+      const newCitiesWithAttractions = cloneDeep(citiesWithAttractions)
+      setCitiesWithAttractions(
         newCitiesWithAttractions.map((cityWithAttractions) => {
           return {
             ...cityWithAttractions,
@@ -91,12 +91,12 @@ const City = (props: CityProps) => {
   }
 
   const deleteCity = () => {
-    const newCitiesWithAttractions = cloneDeep(filteredCitiesWithAttractions)
+    const newCitiesWithAttractions = cloneDeep(citiesWithAttractions)
     const remainingCitiesWithAttractions = newCitiesWithAttractions.filter(
       (cityWithAttractions) =>
         cityWithAttractions.city.placeId !== city?.city.placeId
     )
-    setFilteredCitiesWithAttractions(remainingCitiesWithAttractions)
+    setCitiesWithAttractions(remainingCitiesWithAttractions)
     localStorage.setItem(
       'citiesWithAttractions',
       JSON.stringify(remainingCitiesWithAttractions)

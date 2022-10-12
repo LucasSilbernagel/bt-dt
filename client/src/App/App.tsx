@@ -33,11 +33,6 @@ const App: React.FC = () => {
   const [citiesWithAttractions, setCitiesWithAttractions] = useState<
     ICityWithAttractions[]
   >([])
-  /** Array of cities with attraction data, filtered */
-  const [filteredCitiesWithAttractions, setFilteredCitiesWithAttractions] =
-    useState<ICityWithAttractions[]>([])
-  /** The city filter that has been selected */
-  const [cityFilter, setCityFilter] = useState<string | null>(null)
   /** The user's theme setting, saved in localStorage */
   const savedIsDarkMode = localStorage.getItem('isDarkMode')
 
@@ -62,8 +57,7 @@ const App: React.FC = () => {
     )
     if (
       fetchedCitiesWithAttractions !== null &&
-      !citiesWithAttractions.length &&
-      !filteredCitiesWithAttractions.length
+      !citiesWithAttractions.length
     ) {
       setCitiesWithAttractions(JSON.parse(fetchedCitiesWithAttractions))
     }
@@ -84,16 +78,16 @@ const App: React.FC = () => {
   useEffect(() => {
     if (
       searchedCity &&
-      !filteredCitiesWithAttractions.find(
+      !citiesWithAttractions.find(
         (savedCity) =>
           savedCity.city.formattedName === searchedCity.formattedName
       )
     ) {
       getAttractions()
     }
-  }, [searchedCity, filteredCitiesWithAttractions])
+  }, [searchedCity, citiesWithAttractions])
 
-  /** If the searched city is not already saved, add it to the filteredCitiesWithAttractions list */
+  /** If the searched city is not already saved, add it to the citiesWithAttractions list */
   useEffect(() => {
     if (
       !loading &&
@@ -101,13 +95,13 @@ const App: React.FC = () => {
       data &&
       data.attractions.length > 0 &&
       searchedCity &&
-      !filteredCitiesWithAttractions.find(
+      !citiesWithAttractions.find(
         (newCity) => newCity.city.formattedName === searchedCity.formattedName
       )
     ) {
-      setFilteredCitiesWithAttractions(() => {
+      setCitiesWithAttractions(() => {
         const newCitiesWithAttractions: ICityWithAttractions[] = cloneDeep(
-          filteredCitiesWithAttractions
+          citiesWithAttractions
         )
         newCitiesWithAttractions.push({
           city: searchedCity,
@@ -118,22 +112,22 @@ const App: React.FC = () => {
         return newCitiesWithAttractions
       })
     }
-  }, [loading, error, data, searchedCity, filteredCitiesWithAttractions])
+  }, [loading, error, data, searchedCity, citiesWithAttractions])
 
-  /** When the filteredCitiesWithAttractions list is updated, also update localStorage */
+  /** When the citiesWithAttractions list is updated, also update localStorage */
   useEffect(() => {
-    if (filteredCitiesWithAttractions.length > 0) {
+    if (citiesWithAttractions.length > 0) {
       localStorage.setItem(
         'citiesWithAttractions',
         JSON.stringify(
           /** Don't save cities that don't have any attractions */
-          filteredCitiesWithAttractions.filter(
+          citiesWithAttractions.filter(
             (cityWithAttractions) => cityWithAttractions.attractions.length > 0
           )
         )
       )
     }
-  }, [filteredCitiesWithAttractions])
+  }, [citiesWithAttractions])
 
   /** When a city is searched, navigate to the city page. */
   useEffect(() => {
@@ -141,22 +135,6 @@ const App: React.FC = () => {
       navigate(`/city/${searchedCity.placeId}`, { replace: true })
     }
   }, [searchedCity])
-
-  /** Handle filters */
-  useEffect(() => {
-    setFilteredCitiesWithAttractions(citiesWithAttractions)
-    /** Filter by city */
-    if (cityFilter) {
-      setFilteredCitiesWithAttractions(() => {
-        const newCitiesWithAttractions: ICityWithAttractions[] = cloneDeep(
-          filteredCitiesWithAttractions
-        )
-        return newCitiesWithAttractions.filter(
-          (selectedCity) => selectedCity.city.formattedName === cityFilter
-        )
-      })
-    }
-  }, [citiesWithAttractions, cityFilter])
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
@@ -173,8 +151,7 @@ const App: React.FC = () => {
             sx={{
               maxWidth: {
                 xs: '800px',
-                lg:
-                  filteredCitiesWithAttractions.length > 0 ? '1200px' : '800px',
+                lg: citiesWithAttractions.length > 0 ? '1200px' : '800px',
               },
               width: '100%',
               margin: '0 auto',
@@ -186,14 +163,8 @@ const App: React.FC = () => {
                 element={
                   <Overview
                     setSearchedCity={setSearchedCity}
-                    filteredCitiesWithAttractions={
-                      filteredCitiesWithAttractions
-                    }
-                    setFilteredCitiesWithAttractions={
-                      setFilteredCitiesWithAttractions
-                    }
-                    cityFilter={cityFilter}
-                    setCityFilter={setCityFilter}
+                    citiesWithAttractions={citiesWithAttractions}
+                    setCitiesWithAttractions={setCitiesWithAttractions}
                   />
                 }
               />
@@ -208,24 +179,20 @@ const App: React.FC = () => {
                     }}
                   >
                     <City
-                      city={filteredCitiesWithAttractions.find(
+                      city={citiesWithAttractions.find(
                         (cityWithAttractions) =>
                           cityWithAttractions.city.formattedName ===
                           searchedCity?.formattedName
                       )}
                       loading={loading}
-                      filteredCitiesWithAttractions={
-                        filteredCitiesWithAttractions
-                      }
-                      setFilteredCitiesWithAttractions={
-                        setFilteredCitiesWithAttractions
-                      }
+                      citiesWithAttractions={citiesWithAttractions}
+                      setCitiesWithAttractions={setCitiesWithAttractions}
                       setSearchedCity={setSearchedCity}
                     />
                   </Box>
                 }
               />
-              {filteredCitiesWithAttractions.map((cityWithAttractions) => {
+              {citiesWithAttractions.map((cityWithAttractions) => {
                 return (
                   <Route
                     key={cityWithAttractions.city.placeId}
@@ -241,12 +208,8 @@ const App: React.FC = () => {
                         <City
                           city={cityWithAttractions}
                           loading={loading}
-                          filteredCitiesWithAttractions={
-                            filteredCitiesWithAttractions
-                          }
-                          setFilteredCitiesWithAttractions={
-                            setFilteredCitiesWithAttractions
-                          }
+                          citiesWithAttractions={citiesWithAttractions}
+                          setCitiesWithAttractions={setCitiesWithAttractions}
                           setSearchedCity={setSearchedCity}
                         />
                       </Box>
