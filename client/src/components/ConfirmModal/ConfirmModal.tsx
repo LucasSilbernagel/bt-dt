@@ -28,6 +28,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
       open={isModalOpen}
       onClose={handleCloseModal}
       aria-labelledby="modal-title"
+      data-testid="confirm-modal"
     >
       <Box sx={modalStyle}>
         <Typography id="modal-title" variant="h6" component="h2">
@@ -44,12 +45,17 @@ const ConfirmModal = (props: ConfirmModalProps) => {
               onClick={handleCloseModal}
               variant="outlined"
               color="warning"
+              data-testid="cancel-button"
             >
               Cancel
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" onClick={handleConfirm}>
+            <Button
+              variant="contained"
+              onClick={handleConfirm}
+              data-testid="confirm-button"
+            >
               Yes
             </Button>
           </Grid>

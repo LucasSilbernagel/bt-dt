@@ -56,6 +56,7 @@ const MapIcon = (props: MapIconProps) => {
   if (attraction) {
     return (
       <AttractionsIcon
+        data-testid="attraction-icon"
         tabIndex={0}
         onClick={(e: any) =>
           handleClick(e, cityWithAttractions, popupType, attraction)
@@ -69,6 +70,7 @@ const MapIcon = (props: MapIconProps) => {
   } else {
     return (
       <LocationCityIcon
+        data-testid="city-icon"
         tabIndex={0}
         onClick={(e: any) => handleClick(e, cityWithAttractions, popupType)}
         onKeyDown={(e: any) =>
