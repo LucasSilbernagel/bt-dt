@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import App from './App'
 import { BrowserRouter } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/client'
@@ -14,6 +14,9 @@ describe('App', () => {
       </BrowserRouter>
     )
     expect(screen.getByTestId('theme-toggle')).toBeInTheDocument()
+    expect(screen.getByText('Switch to dark theme')).toBeInTheDocument()
+    fireEvent.click(screen.getByTestId('theme-toggle'))
+    expect(screen.getByText('Switch to light theme')).toBeInTheDocument()
     expect(screen.getByText('Been there, done that!')).toBeInTheDocument()
     expect(screen.getByTestId('search-autocomplete')).toBeInTheDocument()
     expect(screen.getByTestId('city-map-container')).toBeInTheDocument()
