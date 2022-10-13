@@ -21,6 +21,7 @@ const Header = (props: HeaderProps) => {
                 color="default"
                 checked={isDarkMode}
                 onClick={handleThemeChange}
+                data-testid="theme-toggle"
               />
             }
             label={

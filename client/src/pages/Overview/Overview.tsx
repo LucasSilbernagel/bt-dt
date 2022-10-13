@@ -107,6 +107,7 @@ const Overview = (props: OverviewProps) => {
                       variant="outlined"
                       onClick={handleResetFilters}
                       color="warning"
+                      data-testid="reset-filters-button"
                     >
                       Reset map & filters
                     </Button>
@@ -116,6 +117,7 @@ const Overview = (props: OverviewProps) => {
                       variant="outlined"
                       onClick={() => setIsModalOpen(true)}
                       color="error"
+                      data-testid="clear-data-button"
                     >
                       Clear all data
                     </Button>

@@ -20,6 +20,7 @@ const MapLayerSelect = (props: MapLayerSelectProps) => {
   return (
     <Paper elevation={3}>
       <Autocomplete
+        data-testid="map-layer-select"
         onChange={(event, value) => handleChange(event, value)}
         options={['Cities', 'Attractions']}
         getOptionLabel={(option: string) => option}

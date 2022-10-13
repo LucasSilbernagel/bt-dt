@@ -16,6 +16,7 @@ const MapLegend = () => {
           <Grid item xs={3}>
             <Tooltip arrow title="All attractions visited">
               <LocationCityIcon
+                data-testid="all-visited-icon"
                 tabIndex={0}
                 sx={{
                   fontSize: '2rem',
@@ -27,6 +28,7 @@ const MapLegend = () => {
           <Grid item xs={3}>
             <Tooltip arrow title="Some attractions visited">
               <LocationCityIcon
+                data-testid="some-visited-icon"
                 tabIndex={0}
                 sx={{
                   fontSize: '2rem',
@@ -38,6 +40,7 @@ const MapLegend = () => {
           <Grid item xs={3}>
             <Tooltip arrow title="No attractions visited">
               <LocationCityIcon
+                data-testid="none-visited-icon"
                 tabIndex={0}
                 sx={{
                   fontSize: '2rem',
@@ -58,6 +61,7 @@ const MapLegend = () => {
           <Grid item xs={3}>
             <Tooltip arrow title="Visited">
               <AttractionsIcon
+                data-testid="visited-icon"
                 tabIndex={0}
                 sx={{ fontSize: '2rem', color: '#009E73' }}
               />
@@ -66,6 +70,7 @@ const MapLegend = () => {
           <Grid item xs={3}>
             <Tooltip arrow title="Not visited">
               <AttractionsIcon
+                data-testid="not-visited-icon"
                 tabIndex={0}
                 sx={{ fontSize: '2rem', color: '#E69F00' }}
               />

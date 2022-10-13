@@ -108,7 +108,11 @@ const City = (props: CityProps) => {
 
   if (loading) {
     return (
-      <Backdrop sx={{ color: 'white' }} open={true}>
+      <Backdrop
+        data-testid="loading-backdrop"
+        sx={{ color: 'white' }}
+        open={true}
+      >
         <CircularProgress color="inherit" />
       </Backdrop>
     )
@@ -124,7 +128,11 @@ const City = (props: CityProps) => {
         <Grid container justifyContent="space-between">
           <Grid item>
             <Tooltip arrow title="Back">
-              <Link to="/" aria-label="Return to the overview page">
+              <Link
+                to="/"
+                aria-label="Return to the overview page"
+                data-testid="back-button"
+              >
                 <ArrowBackIcon fontSize="large" color="primary" />
               </Link>
             </Tooltip>
@@ -134,6 +142,7 @@ const City = (props: CityProps) => {
               variant="outlined"
               onClick={() => setIsModalOpen(true)}
               color="error"
+              data-testid="delete-city-button"
             >
               Delete city
             </Button>
@@ -155,6 +164,9 @@ const City = (props: CityProps) => {
                       <Grid item xs={10} sm={8} md={6}>
                         <FormControlLabel
                           control={<Checkbox />}
+                          data-testid="attraction-checkbox"
+                          role="checkbox"
+                          aria-checked={attraction.isVisited}
                           label={attraction.formattedName}
                           onChange={() =>
                             handleCheckbox(attraction.formattedName)
@@ -180,7 +192,7 @@ const City = (props: CityProps) => {
             </List>
           ) : (
             <Box sx={{ padding: '2em' }}>
-              <Typography variant="h4">
+              <Typography variant="h4" data-testid="no-data-message">
                 Sorry, the{' '}
                 <a
                   href="https://apidocs.geoapify.com/docs/places/#about"

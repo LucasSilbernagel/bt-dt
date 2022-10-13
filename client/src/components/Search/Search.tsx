@@ -101,6 +101,7 @@ const Search = (props: OverviewProps) => {
   return (
     <Paper elevation={3} sx={{ marginBottom: '1em' }}>
       <Autocomplete
+        data-testid="search-autocomplete"
         onInputChange={handleInputChange}
         onChange={handleSearch}
         options={cityOptions}

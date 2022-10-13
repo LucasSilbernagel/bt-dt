@@ -44,6 +44,7 @@ const CityFilter = (props: CityFilterProps) => {
   return (
     <Paper elevation={3}>
       <Autocomplete
+        data-testid="city-filter"
         onChange={(event, value) => handleChange(event, value)}
         options={cities}
         getOptionLabel={(option: string) => option}

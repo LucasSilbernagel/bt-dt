@@ -184,7 +184,11 @@ const CityMap = (props: CityMapProps) => {
         }}
         ref={containerRef}
       >
-        <Paper elevation={3} sx={{ borderRadius: '5px', overflow: 'hidden' }}>
+        <Paper
+          elevation={3}
+          sx={{ borderRadius: '5px', overflow: 'hidden' }}
+          data-testid="city-map-container"
+        >
           <Map
             {...mapViewport}
             reuseMaps
