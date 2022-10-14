@@ -24,6 +24,7 @@ A travel destination log.
 - [graphql](https://www.npmjs.com/package/graphql)
 - [Apollo Client](https://www.apollographql.com/docs/react/)
 - [Mapbox](https://www.mapbox.com/)
+- [react-router-dom](https://www.npmjs.com/package/react-router-dom)
 - [lodash.clonedeep](https://www.npmjs.com/package/lodash.clonedeep)
 
 ### Linting & Formatting
