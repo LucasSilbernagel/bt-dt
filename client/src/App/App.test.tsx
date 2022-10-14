@@ -27,6 +27,7 @@ describe('App', () => {
     expect(screen.getByTestId('none-visited-icon')).toBeInTheDocument()
     expect(screen.getByTestId('visited-icon')).toBeInTheDocument()
     expect(screen.getByTestId('not-visited-icon')).toBeInTheDocument()
+    expect(screen.getByTestId('github-link')).toBeInTheDocument()
     expect(screen.getByText('Built by')).toBeInTheDocument()
     expect(screen.getByText('Lucas Silbernagel')).toBeInTheDocument()
   })
