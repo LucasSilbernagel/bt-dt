@@ -10,7 +10,8 @@
     "dev": "concurrently \"npm run start-watch\" \"cd client && npm start\"",
     "lint": "eslint --ext \".js,.jsx,.ts,.tsx\" --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ext \".js,.jsx,.ts,.tsx\" --ignore-path .gitignore .",
-    "test:unit": "cd client && npm run test"
+    "test:unit": "cd client && npm run test",
+    "test:e2e": "cd client && npx cypress open"
   },
   "author": {
     "name": "Lucas Silbernagel"

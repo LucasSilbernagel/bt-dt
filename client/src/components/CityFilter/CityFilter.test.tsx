@@ -9,6 +9,7 @@ describe('CityFilter', () => {
       <CityFilter
         citiesWithAttractions={mockCitiesWithAttractions}
         setCityFilter={setCityFilter}
+        cityFilter={''}
       />
     )
     expect(screen.getByTestId('city-filter')).toBeInTheDocument()

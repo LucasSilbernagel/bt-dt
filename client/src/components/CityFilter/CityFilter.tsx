@@ -11,10 +11,11 @@ import { ICityWithAttractions } from '../../types'
 interface CityFilterProps {
   citiesWithAttractions: ICityWithAttractions[]
   setCityFilter: Dispatch<SetStateAction<string>>
+  cityFilter: string
 }
 
 const CityFilter = (props: CityFilterProps) => {
-  const { citiesWithAttractions, setCityFilter } = props
+  const { citiesWithAttractions, setCityFilter, cityFilter } = props
 
   /** Options for the city filter */
   const [cities, setCities] = useState<string[]>([])
@@ -44,6 +45,7 @@ const CityFilter = (props: CityFilterProps) => {
   return (
     <Paper elevation={3}>
       <Autocomplete
+        value={cityFilter.length > 0 ? cityFilter : null}
         data-testid="city-filter"
         onChange={(event, value) => handleChange(event, value)}
         options={cities}

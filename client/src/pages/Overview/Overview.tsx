@@ -93,6 +93,7 @@ const Overview = (props: OverviewProps) => {
                   <CityFilter
                     citiesWithAttractions={citiesWithAttractions}
                     setCityFilter={setCityFilter}
+                    cityFilter={cityFilter}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} lg={12}>
