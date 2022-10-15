@@ -69,6 +69,7 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  cache: 'bounded',
 })
 
 server.listen().then(({ url }) => console.log(`Server ready at ${url}`))
