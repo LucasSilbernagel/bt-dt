@@ -71,10 +71,14 @@ const resolvers = {
   },
 }
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  cache: 'bounded',
-})
+async function startApolloServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    cache: 'bounded',
+  })
+  const { url } = await server.listen(4000)
+  console.log(`🚀  Server ready at ${url}`)
+}
 
-server.listen().then(({ url }) => console.log(`Server ready at ${url}`))
+startApolloServer()
