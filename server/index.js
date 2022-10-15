@@ -61,7 +61,12 @@ const resolvers = {
               : attraction.properties.datasource.raw.website,
           }
         })
-      return formattedAttractions
+      /** Return formatted attractions without duplicate names */
+      return [
+        ...new Map(
+          formattedAttractions.map((item) => [item['formattedName'], item])
+        ).values(),
+      ]
     },
   },
 }
