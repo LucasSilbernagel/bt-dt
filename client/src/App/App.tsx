@@ -143,7 +143,7 @@ const App: React.FC = () => {
         <Box
           sx={{
             padding: '0em 1em 1em 1em',
-            minHeight: '80vh',
+            minHeight: '60vh',
           }}
         >
           <Box
