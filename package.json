@@ -6,6 +6,7 @@
   "scripts": {
     "installDeps": "npm install && cd client && npm install",
     "start": "nodemon index.js",
+    "build": "cd client && npm run build",
     "start-watch": "nodemon index.js --ignore client",
     "dev": "concurrently \"npm run start-watch\" \"cd client && npm start\"",
     "lint": "eslint --ext \".js,.jsx,.ts,.tsx\" --ignore-path .gitignore .",
