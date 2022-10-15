@@ -77,7 +77,8 @@ async function startApolloServer() {
     resolvers,
     cache: 'bounded',
   })
-  const { url } = await server.listen(4000)
+  const port = process.env.PORT || 4000
+  const { url } = await server.listen(port, () => port)
   console.log(`🚀  Server ready at ${url}`)
 }
 
