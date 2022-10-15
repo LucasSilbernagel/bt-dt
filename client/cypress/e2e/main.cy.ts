@@ -211,4 +211,15 @@ describe('Checks that the app renders and works properly', () => {
     cy.get('[data-testid="clear-data-button"]').click()
     cy.get('[data-testid="confirm-button"]').click()
   })
+
+  it('renders an error when a city without attractions is searched', () => {
+    cy.get('#\\:r1\\:').clear()
+    cy.get('#\\:r1\\:').type('banff')
+    cy.get('#\\:r1\\:-option-0').click()
+    cy.get('[data-testid="no-data-message"]').should(
+      'have.text',
+      "Sorry, the Geoapify places API doesn't have any attractions on file for this city! 🙁"
+    )
+    cy.get('[data-testid="ArrowBackIcon"]').click()
+  })
 })
