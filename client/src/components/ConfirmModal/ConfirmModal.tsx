@@ -23,46 +23,48 @@ const ConfirmModal = (props: ConfirmModalProps) => {
     p: 4,
   }
 
-  return (
-    <Modal
-      open={isModalOpen}
-      onClose={handleCloseModal}
-      aria-labelledby="modal-title"
-      data-testid="confirm-modal"
-    >
-      <Box sx={modalStyle}>
-        <Typography id="modal-title" variant="h6" component="h2">
-          {confirmMessage}
-        </Typography>
-        <Grid
-          container
-          spacing={2}
-          justifyContent="center"
-          sx={{ marginTop: '0.5em' }}
-        >
-          <Grid item>
-            <Button
-              onClick={handleCloseModal}
-              variant="outlined"
-              color="warning"
-              data-testid="cancel-button"
-            >
-              Cancel
-            </Button>
+  if (isModalOpen) {
+    return (
+      <Modal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-title"
+        data-testid="confirm-modal"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="modal-title" variant="h6" component="h2">
+            {confirmMessage}
+          </Typography>
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            sx={{ marginTop: '0.5em' }}
+          >
+            <Grid item>
+              <Button
+                onClick={handleCloseModal}
+                variant="outlined"
+                color="warning"
+                data-testid="cancel-button"
+              >
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={handleConfirm}
+                data-testid="confirm-button"
+              >
+                Yes
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              onClick={handleConfirm}
-              data-testid="confirm-button"
-            >
-              Yes
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-    </Modal>
-  )
+        </Box>
+      </Modal>
+    )
+  } else return null
 }
 
 export default ConfirmModal

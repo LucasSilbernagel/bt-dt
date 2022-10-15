@@ -137,16 +137,18 @@ const City = (props: CityProps) => {
               </Link>
             </Tooltip>
           </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              onClick={() => setIsModalOpen(true)}
-              color="error"
-              data-testid="delete-city-button"
-            >
-              Delete city
-            </Button>
-          </Grid>
+          {city && city.attractions?.length > 0 && (
+            <Grid item>
+              <Button
+                variant="outlined"
+                onClick={() => setIsModalOpen(true)}
+                color="error"
+                data-testid="delete-city-button"
+              >
+                Delete city
+              </Button>
+            </Grid>
+          )}
         </Grid>
         <Paper elevation={3} sx={{ width: '100%' }}>
           <Typography

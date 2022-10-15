@@ -11,7 +11,8 @@
     "lint": "eslint --ext \".js,.jsx,.ts,.tsx\" --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ext \".js,.jsx,.ts,.tsx\" --ignore-path .gitignore .",
     "test:unit": "cd client && npm run test",
-    "test:e2e": "cd client && npx cypress open"
+    "test:e2e": "cd client && npx cypress open",
+    "storybook": "cd client && npm run storybook"
   },
   "author": {
     "name": "Lucas Silbernagel"

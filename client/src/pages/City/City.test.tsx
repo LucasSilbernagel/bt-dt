@@ -16,7 +16,6 @@ describe('City', () => {
       </BrowserRouter>
     )
     expect(screen.getByTestId('back-button')).toBeInTheDocument()
-    expect(screen.getByTestId('delete-city-button')).toBeInTheDocument()
     expect(screen.getByTestId(`no-data-message`)).toHaveTextContent(
       `Sorry, the Geoapify places API doesn't have any attractions on file for this city! 🙁`
     )
