@@ -2,7 +2,7 @@
   "name": "bt-dt",
   "version": "1.0.0",
   "description": "A travel destination log",
-  "main": "server/index.js",
+  "main": "index.js",
   "scripts": {
     "installDeps": "npm install && cd client && npm install",
     "start": "nodemon index.js",
