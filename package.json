@@ -1,7 +1,7 @@
 {
   "name": "bt-dt",
   "version": "1.0.0",
-  "description": "A travel destination log",
+  "description": "A travel destination log. City and tourist attraction data is provided by the Geoapify Places API and converted to GraphQL with Apollo Server and Apollo Client.",
   "main": "index.js",
   "scripts": {
     "installDeps": "npm install && cd client && npm install",

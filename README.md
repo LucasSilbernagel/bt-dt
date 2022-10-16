@@ -1,6 +1,6 @@
 # Been There, Done That
 
-A travel destination log.
+A travel destination log. City and tourist attraction data is provided by the Geoapify Places API and converted to GraphQL with Apollo Server and Apollo Client.
 
 ![bt-dt](https://user-images.githubusercontent.com/57023164/195994801-540f91f1-6bab-4f2a-b441-94f530e8760a.png)
 

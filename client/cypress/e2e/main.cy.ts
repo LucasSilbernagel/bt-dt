@@ -22,14 +22,17 @@ describe('Checks that the app renders and works properly', () => {
       ':nth-child(3) > .css-13i4rnv-MuiGrid-root > .MuiTypography-root'
     ).should('have.text', 'Attractions')
     cy.get('[data-testid="visited-icon"] > path').should('be.visible')
+    cy.get(
+      '.css-gi694y-MuiGrid-root > .MuiGrid-container > :nth-child(1) > .MuiTypography-root'
+    ).should('have.text', 'Built by Lucas Silbernagel')
     cy.get('[data-testid="GitHubIcon"]').should(
       'have.attr',
       'data-testid',
       'GitHubIcon'
     )
-    cy.get(':nth-child(2) > .MuiTypography-root').should(
+    cy.get(':nth-child(3) > .MuiTypography-root').should(
       'have.text',
-      'Built by Lucas Silbernagel'
+      'City and tourist attraction data provided by Geoapify'
     )
   })
 
@@ -109,8 +112,8 @@ describe('Checks that the app renders and works properly', () => {
       'data-testid',
       'EditIcon'
     )
-    cy.get('#\\:r23\\:').should('be.visible')
-    cy.get('#\\:r27\\:').should('be.visible')
+    cy.get('[data-testid="all-visited-icon"]').should('be.visible')
+    cy.get('[data-testid="visited-icon"]').should('be.visible')
     cy.get('[data-tag-index="0"] > .MuiChip-label').should(
       'have.text',
       'Cities'
@@ -127,9 +130,9 @@ describe('Checks that the app renders and works properly', () => {
       'have.text',
       'Clear all data'
     )
-    cy.get('#\\:r1l\\:').clear()
-    cy.get('#\\:r1l\\:').type('vancouver')
-    cy.get('#\\:r1l\\:-option-0').click()
+    cy.get('#\\:r1n\\:').clear()
+    cy.get('#\\:r1n\\:').type('vancouver')
+    cy.get('#\\:r1n\\:-option-0').click()
     cy.get(
       ':nth-child(15) > .css-1lym95h-MuiGrid-root > .MuiGrid-grid-xs-10 > [data-testid="attraction-checkbox"] > .MuiButtonBase-root > .PrivateSwitchBase-input'
     ).should('not.be.checked')
@@ -183,12 +186,12 @@ describe('Checks that the app renders and works properly', () => {
       ':nth-child(1) > .css-1lym95h-MuiGrid-root > .MuiGrid-grid-xs-10 > [data-testid="attraction-checkbox"] > .MuiButtonBase-root > .PrivateSwitchBase-input'
     ).should('be.checked')
     cy.get('[data-testid="ArrowBackIcon"]').click()
-    cy.get('#\\:r67\\:').click()
-    cy.get('#\\:r67\\:-option-1').click()
+    cy.get('#\\:r69\\:').click()
+    cy.get('#\\:r69\\:-option-0').click()
     cy.get('[data-testid="reset-filters-button"]').click()
-    cy.get('#\\:r5p\\:').clear()
-    cy.get('#\\:r5p\\:').type('vancouver')
-    cy.get('#\\:r5p\\:-option-0').click()
+    cy.get('#\\:r5r\\:').clear()
+    cy.get('#\\:r5r\\:').type('vancouver')
+    cy.get('#\\:r5r\\:-option-0').click()
     cy.get('[data-testid="delete-city-button"]').click()
     cy.get('#modal-title').should(
       'have.text',
