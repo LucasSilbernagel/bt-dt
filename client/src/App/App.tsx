@@ -44,6 +44,10 @@ const App: React.FC = () => {
     }
   )
 
+  console.log(loading)
+  console.log(error)
+  console.log(data)
+
   const handleThemeChange = () => {
     localStorage.setItem('isDarkMode', JSON.stringify(!isDarkMode))
     darkModeState(!isDarkMode)
