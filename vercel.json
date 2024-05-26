@@ -1,3 +1,18 @@
 {
-  "buildCommand": "node index.js"
+  "version": 3,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node",
+      "config": {
+        "buildCommand": "npm install"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/*"
+    }
+  ]
 }
